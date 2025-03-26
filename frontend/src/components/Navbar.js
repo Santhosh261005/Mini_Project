@@ -1,17 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Navbar.css";  // Ensure this file exists
 
-export default function Navbar() {
+const Navbar = () => {
   return (
-    <nav>
-      <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/dashboard">Dashboard</Link></li>
-        <li><Link to="/donate">Donate</Link></li>
-        <li><Link to="/chatbot">Chatbot</Link></li>
-        <li><Link to="/rewards">Rewards</Link></li>
-      </ul>
+    <nav className="bg-white shadow-md p-4 flex justify-between items-center">
+      <h1 className="text-2xl font-bold text-blue-700">
+        <Link to="/">RS Donations</Link>
+      </h1>
+      <div className="space-x-6">
+        <Link to="/" className="text-gray-700 hover:text-blue-500">Home</Link>
+        <Link to="/dashboard" className="text-gray-700 hover:text-blue-500">Dashboard</Link>
+        <Link to="/donate-now" className="text-gray-700 hover:text-blue-500">Donate Now</Link>
+        <Link to="/chatbot" className="text-gray-700 hover:text-blue-500">Chatbot</Link>
+        <Link to="/rewards" className="text-gray-700 hover:text-blue-500">Rewards</Link>
+      </div>
     </nav>
   );
-}
+};
+
+export default Navbar;
