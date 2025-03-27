@@ -17,7 +17,7 @@
     "postcss-selector-matches": "^4.0.0",
     "postcss-selector-not": "^8.0.1",
     "postcss-unique-selectors": "^7.0.3",
-    "react-router-dom": "^7.3.0",
+    "react-router-dom": "^7.4.0",
     "react-scripts": "^5.0.1",
     "resolve-url-loader": "^5.0.0",
     "stylehacks": "^7.0.4",

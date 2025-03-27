@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const Donate = () => {
+const DonateNow = () => { // Changed name here
   const [donationType, setDonationType] = useState("books");
   const [description, setDescription] = useState("");
 
@@ -23,7 +23,9 @@ const Donate = () => {
         {/* Donation Form */}
         <form className="mt-6" onSubmit={handleSubmit}>
           {/* Select Donation Type */}
-          <label className="block text-gray-700 font-semibold">What would you like to donate?</label>
+          <label className="block text-gray-700 font-semibold">
+            What would you like to donate?
+          </label>
           <select
             className="w-full mt-2 p-3 border rounded-lg"
             value={donationType}
@@ -37,7 +39,9 @@ const Donate = () => {
           </select>
 
           {/* Description */}
-          <label className="block text-gray-700 font-semibold mt-4">Description</label>
+          <label className="block text-gray-700 font-semibold mt-4">
+            Description
+          </label>
           <textarea
             className="w-full mt-2 p-3 border rounded-lg"
             rows="4"
@@ -59,4 +63,4 @@ const Donate = () => {
   );
 };
 
-export default Donate;
+export default DonateNow; // Keep the export default DonateNow
