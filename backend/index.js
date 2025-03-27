@@ -1,28 +1,17 @@
-require("dotenv").config();  // Load environment variables first
 const express = require("express");
-const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const connectDB = require("./config/db");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
 
-const app = express();  // Initialize app
+dotenv.config();
+connectDB();
 
-// Middleware
-app.use(express.json()); // Parse JSON data
-app.use(cors()); // Enable cross-origin requests
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// MongoDB Connection
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+app.use("/api/auth", authRoutes);
 
-// Routes - Place after app is initialized
-app.use("/auth", require("./routes/auth"));
-
-app.get("/", (req, res) => {
-  res.send("Campus Connect Backend is Running!");
-});
-
-// Start Server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

@@ -49,6 +49,16 @@ const Navbar = () => {
               Rewards
             </Link>
           </li>
+          <li>
+            <Link to="/login" className="text-white hover:text-green-400 drop-shadow-md">
+              Login
+            </Link>
+          </li>
+          <li>
+            <Link to="/signup" className="text-white hover:text-green-400 drop-shadow-md">
+              Signup
+            </Link>
+          </li>
         </ul>
 
         {/* Book Now Button */}
