@@ -21,7 +21,7 @@ donation_stats = db["statistics"]
 predefined_responses = {
     "how to donate": "To donate, sign up on our website, select the items you want to donate, and choose the nearest collection center.",
     "what can be donated": "You can donate clothes, books, toys, stationery, electronic gadgets, and non-perishable food items.",
-    "website details": "Our platform, STUDENT-DONATION, connects students with underprivileged communities, allowing them to donate essential items seamlessly.",
+    "website details": "Our platform, Campus-Connect, Created by Rithwik Mohan connects students with underprivileged communities, allowing them to donate essential items seamlessly.",
     
 }
 
