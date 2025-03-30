@@ -1,49 +1,70 @@
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+require("dotenv").config();
 
-// Register User or Admin
-exports.registerUser = async (req, res) => {
-  try {
-    const { name, rollNumber, contactNumber, email, password, role } = req.body;
+// User Signup (Matching Frontend Page Name)
+exports.Signup = async (req, res) => {  // ✅ Changed function name to "Signup"
+    try {
+        const { fullName, rollNumber, contactNumber, email, password } = req.body;
 
-    // Check if user exists
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+        // Check if user already exists
+        let user = await User.findOne({ email });
+        if (user) return res.status(400).json({ msg: "User already exists" });
+
+        // Hash password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Create new user
+        user = new User({
+            fullName,
+            rollNumber,
+            contactNumber,
+            email,
+            password: hashedPassword,
+        });
+
+        await user.save();
+
+        res.status(201).json({ msg: "User registered successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Server error" });
     }
-
-    // Create new user
-    const user = await User.create({ name, rollNumber, contactNumber, email, password, role });
-
-    res.status(201).json({ message: "User registered successfully" });
-  } catch (error) {
-    console.error("Error registering user:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
 };
 
-// Login User or Admin
-exports.loginUser = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// User Login (Matching Frontend Page Name)
+exports.Login = async (req, res) => {  // ✅ Changed function name to "Login"
+    try {
+        const { email, password } = req.body;
 
-    // Validate input
-    const user = await User.findOne({ email });
-    if (!user || !(await user.matchPassword(password))) {
-      return res.status(400).json({ message: "Invalid credentials" });
+        // Check if user exists
+        let user = await User.findOne({ email });
+        if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+
+        // Compare password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+
+        // Generate JWT Token
+        const payload = {
+            user: {
+                id: user.id,
+            },
+        };
+
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: "1h" },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Server error" });
     }
-
-    // Generate JWT token
-    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, { expiresIn: "1d" });
-
-    res.status(200).json({
-      message: "Login successful",
-      token,
-      user: { id: user._id, name: user.name, email: user.email, role: user.role },
-    });
-  } catch (error) {
-    console.error("Error logging in:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
 };
