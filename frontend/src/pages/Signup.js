@@ -24,13 +24,15 @@ const Signup = () => {
     e.preventDefault();
     setError("");
 
+    
     try {
       const response = await signupUser(formData);
-      alert(response.msg); // Show success message
-      navigate("/login"); // Redirect to login after successful signup
-    } catch (err) {
-      setError(err.msg || "Signup failed. Please try again.");
-    }
+      alert(response.msg); // Success message
+      navigate("/login"); // Redirect after signup
+  } catch (err) {
+      console.error("Signup Error:", err);
+      setError(err.response?.data?.msg || "Signup failed. Please try again.");
+  }
   };
 
   return (

@@ -6,12 +6,14 @@ const API_URL = "http://localhost:5000/api/auth";
 // Signup API Call
 export const signupUser = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/register`, userData);
+    const response = await axios.post(`${API_URL}/Signup`, userData);
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    console.error("Signup API Error:", error.response?.data || error.message);
+    throw error.response?.data || { msg: "Unknown error occurred" };
   }
 };
+
 
 // Login API Call
 export const loginUser = async (userData) => {
