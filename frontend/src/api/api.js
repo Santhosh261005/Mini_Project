@@ -14,7 +14,6 @@ export const signupUser = async (userData) => {
   }
 };
 
-
 // Login API Call
 export const loginUser = async (userData) => {
   try {
@@ -22,5 +21,19 @@ export const loginUser = async (userData) => {
     return response.data;
   } catch (error) {
     throw error.response.data;
+  }
+};
+
+// Fetch User Stats API Call
+export const fetchUserStats = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Ensure the user is authenticated
+    const response = await axios.get("http://localhost:5000/api/user/stats", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("User Stats API Error:", error.response?.data || error.message);
+    throw error.response?.data || { msg: "Failed to fetch user stats" };
   }
 };
