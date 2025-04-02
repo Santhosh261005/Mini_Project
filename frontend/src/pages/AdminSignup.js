@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { adminSignupUser } from "../api/adminApi"; // Import the API function
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
@@ -17,26 +18,25 @@ const AdminSignup = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-
-    // Replace this with your actual admin signup logic
-    // try {
-    //   const response = await adminSignupUser(formData);
-    //   alert(response.msg);
-    //   navigate('/admin-login');
-    // } catch (err) {
-    //   setError(err.msg || 'Admin signup failed.');
-    // }
-
-    // Temporary logic for demonstration
-    alert('Admin signup successful! (Dummy)');
-    navigate('/admin-login');
+    setError("");
+  
+    try {
+      const response = await adminSignupUser(formData);
+      alert(response.msg); // Success message from backend
+      navigate("/admin-login");
+    } catch (err) {
+      setError(err.message);
+    }
   };
+  
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -72,7 +72,7 @@ const AdminSignup = () => {
           <input
             type="number"
             name="middleAgeCount"
-            placeholder="No. of Middle Age People"
+            placeholder="No. of Middle Aged People"
             className="w-full p-2 border rounded mt-2"
             onChange={handleChange}
             required

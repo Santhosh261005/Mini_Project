@@ -10,6 +10,8 @@ const app = express(); // Initialize Express
 app.use(cors()); // Allow cross-origin requests
 app.use(express.json()); // Enable JSON parsing
 
+
+
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGO_URI, {
@@ -24,6 +26,12 @@ app.use("/api/auth", authRoutes); // Authentication routes
 
 const userRoutes = require("./routes/user");
 app.use("/api/user", userRoutes);
+
+// Import Routes
+const adminRoutes = require("./routes/adminRoutes");
+// Use Routes
+app.use("/api/admin", adminRoutes);
+
 
 
 // Start Server

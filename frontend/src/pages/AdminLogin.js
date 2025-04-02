@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { adminLoginUser } from "../api/adminApi"; // Import the API function
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -12,10 +13,19 @@ const AdminLogin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate('/admin-options'); // Navigate directly to options
+  
+    try {
+      const response = await adminLoginUser(formData);
+      alert(response.msg); // Success message from backend
+      localStorage.setItem("adminToken", response.token); // Store token
+      navigate("/admin-options");
+    } catch (err) {
+      alert(err.message);
+    }
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
