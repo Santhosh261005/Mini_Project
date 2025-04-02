@@ -1,9 +1,11 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
-const Navbar = () => {
+const Navbar = ({ children }) => {
+  const location = useLocation();
+
   return (
     <nav className="flex justify-between items-center py-4 px-6 bg-black/50">
       {/* Logo Section */}
@@ -25,47 +27,58 @@ const Navbar = () => {
       <div className="flex items-center space-x-6">
         <ul className="flex space-x-6 text-lg font-medium">
           <li>
-            <Link to="/" className="text-white hover:text-orange-500 drop-shadow-md">
+            <Link
+              to="/"
+              className={`text-white hover:text-orange-500 drop-shadow-md ${
+                location.pathname === "/" ? "text-orange-500" : ""
+              }`}
+            >
               Home
             </Link>
           </li>
           <li>
-            <Link to="/dashboard" className="text-white hover:text-orange-500 drop-shadow-md">
+            <Link
+              to="/dashboard"
+              className={`text-white hover:text-orange-500 drop-shadow-md ${
+                location.pathname === "/dashboard" ? "text-orange-500" : ""
+              }`}
+            >
               Dashboard
             </Link>
           </li>
           <li>
-            <Link to="/donate" className="text-white hover:text-orange-500 drop-shadow-md">
+            <Link
+              to="/donate"
+              className={`text-white hover:text-orange-500 drop-shadow-md ${
+                location.pathname === "/donate" ? "text-orange-500" : ""
+              }`}
+            >
               Donate Now
             </Link>
           </li>
           <li>
-            <Link to="/chatbot" className="text-white hover:text-orange-500 drop-shadow-md">
+            <Link
+              to="/chatbot"
+              className={`text-white hover:text-orange-500 drop-shadow-md ${
+                location.pathname === "/chatbot" ? "text-orange-500" : ""
+              }`}
+            >
               Chatbot
             </Link>
           </li>
           <li>
-            <Link to="/rewards" className="text-white hover:text-orange-500 drop-shadow-md">
+            <Link
+              to="/rewards"
+              className={`text-white hover:text-orange-500 drop-shadow-md ${
+                location.pathname === "/rewards" ? "text-orange-500" : ""
+              }`}
+            >
               Rewards
             </Link>
           </li>
-          <li>
-            <Link to="/login" className="text-white hover:text-green-400 drop-shadow-md">
-              Login
-            </Link>
-          </li>
-          <li>
-            <Link to="/signup" className="text-white hover:text-green-400 drop-shadow-md">
-              Signup
-            </Link>
-          </li>
         </ul>
-
-        {/* Book Now Button */}
-        <button className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 drop-shadow-md">
-          Book Now
-        </button>
       </div>
+      {children}
     </nav>
   );
 };
