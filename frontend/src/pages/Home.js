@@ -1,5 +1,6 @@
 // src/pages/Home.js
 import React from "react";
+import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/background.png";
 

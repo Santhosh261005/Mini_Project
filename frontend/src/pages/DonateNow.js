@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-
+import Navbar from "../components/Navbar";
 const DonateNow = () => { // Changed name here
   const [donationType, setDonationType] = useState("books");
   const [description, setDescription] = useState("");

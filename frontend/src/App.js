@@ -33,7 +33,7 @@ function App() {
       <Routes>
         <Route path="/" element={<ErrorBoundary><WelcomePage /></ErrorBoundary>} />
         <Route path="/home" element={<ErrorBoundary><Home /></ErrorBoundary>} />
-        <Route path="/dashboard" element={<ErrorBoundary><ProtectedRoute element={<Dashboard />} isAuthenticated={isAuthenticated} /></ErrorBoundary>} />
+        <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
         <Route path="/donate" element={<ErrorBoundary><DonateNow /></ErrorBoundary>} />
         <Route path="/chatbot" element={<ErrorBoundary><Chatbot /></ErrorBoundary>} />
         <Route path="/rewards" element={<ErrorBoundary><Rewards /></ErrorBoundary>} />

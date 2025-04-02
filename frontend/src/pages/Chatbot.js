@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Send } from "lucide-react";
+import Navbar from "../components/Navbar";
 
 const Chatbot = () => {
   const [messages, setMessages] = useState([

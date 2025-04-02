@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios"; // Correct import
-
+import Navbar from "../components/Navbar";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
