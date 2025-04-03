@@ -22,7 +22,7 @@ const WelcomePage = () => {
           </div>
           
           <div className="p-8">
-            <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Where Kind meets need</h2>
+            <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Where Kind meets Needy</h2>
             
             <div className="space-y-4">
               <Link to="/login" className="flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 h-12 rounded-md shadow-md hover:shadow-lg group text-white p-2">

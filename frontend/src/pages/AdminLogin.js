@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Shield, Key, ArrowRight } from 'lucide-react';
+=======
+import { adminLoginUser } from "../api/adminApi"; // Import the API function
+>>>>>>> caa5d750404b1af18d194a4f28b919253457a53f
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -14,11 +18,24 @@ const AdminLogin = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     setError("");
     navigate('/admin-options');
+=======
+  
+    try {
+      const response = await adminLoginUser(formData);
+      alert(response.msg); // Success message from backend
+      localStorage.setItem("adminToken", response.token); // Store token
+      navigate("/admin-options");
+    } catch (err) {
+      alert(err.message);
+    }
+>>>>>>> caa5d750404b1af18d194a4f28b919253457a53f
   };
+
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50">

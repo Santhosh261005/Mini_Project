@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+<<<<<<< HEAD
 import { Users, MapPin, Calendar, Mail, Lock, ArrowRight } from 'lucide-react';
+=======
+import { adminSignupUser } from "../api/adminApi"; // Import the API function
+>>>>>>> caa5d750404b1af18d194a4f28b919253457a53f
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
@@ -18,17 +22,33 @@ const AdminSignup = () => {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+<<<<<<< HEAD
     setError('');
 
     // Temporary logic for demonstration
     alert('Admin signup successful!');
     navigate('/admin-login');
+=======
+    setError("");
+  
+    try {
+      const response = await adminSignupUser(formData);
+      alert(response.msg); // Success message from backend
+      navigate("/admin-login");
+    } catch (err) {
+      setError(err.message);
+    }
+>>>>>>> caa5d750404b1af18d194a4f28b919253457a53f
   };
+  
 
   return (
     <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-slate-50 via-white to-blue-50">
@@ -39,6 +59,7 @@ const AdminSignup = () => {
         <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
+<<<<<<< HEAD
       <div className="relative z-10 w-full max-w-md px-4 sm:px-0">
         <div className="overflow-hidden shadow-xl border-0 bg-white/80 backdrop-blur-sm rounded-lg">
           {/* Header */}
@@ -190,6 +211,81 @@ const AdminSignup = () => {
         <p className="text-center text-gray-500 text-sm mt-6">
           © 2023 Campus Connect - Administrative System
         </p>
+=======
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="ownerName"
+            placeholder="Owner Name"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="ngoLocation"
+            placeholder="NGO Location"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="childrenCount"
+            placeholder="No. of Children"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="middleAgeCount"
+            placeholder="No. of Middle Aged People"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="number"
+            name="olderCount"
+            placeholder="No. of Older (>60) People"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="text"
+            name="establishmentYear"
+            placeholder="Year of Establishment"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="email"
+            name="ownerEmail"
+            placeholder="Owner Email"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
+
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600"
+          >
+            Signup
+          </button>
+        </form>
+>>>>>>> caa5d750404b1af18d194a4f28b919253457a53f
       </div>
     </div>
   );
