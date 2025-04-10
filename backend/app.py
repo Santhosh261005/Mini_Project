@@ -44,7 +44,7 @@ predefined_responses = {
   "how do i earn points for donating?": "you earn points based on the number and quality of donations. more meaningful donations = more points!",
   "what can i do with my reward points?": "your reward points can be used for leaderboard rankings, redeeming special rewards (if applicable), or earning social recognition.",
   "do my points expire?": "no, your points remain valid as long as your account is active.",
-  "how do i know who gets my donations?": "we partner with verified organizations, and you can track where your donation is sent from the 'my donations' page.",
+  "how do i know who gets my donation?": "we partner with verified organizations, and you can track where your donation is sent from the 'my donations' page.",
   "can i choose which orphanage/school receives my items?": "yes! during donation, you can select from a list of verified recipients.",
   "are there any upcoming donation events?": "visit the 'events' section to stay updated on upcoming donation drives.",
   "can i volunteer for donation drives?": "yes! you can sign up as a volunteer in the 'volunteer' section of the platform.",
