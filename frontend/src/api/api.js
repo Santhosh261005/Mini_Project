@@ -1,16 +1,27 @@
 import axios from "axios";
 
 // Base URL of your backend (Change if running on a different port)
-const API_URL = "http://localhost:5000/api/auth";
+const API_URL = "http://localhost:5000/routes/auth";
 
-// Signup API Call
-export const signupUser = async (userData) => {
+export const signup = async (userData) => {
   try {
-    const response = await axios.post(`${API_URL}/Signup`, userData);
-    return response.data;
+    const response = await fetch(`${API_URL}/Signup`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText);
+    }
+
+    return await response.json();
   } catch (error) {
-    console.error("Signup API Error:", error.response?.data || error.message);
-    throw error.response?.data || { msg: "Unknown error occurred" };
+    console.error("Signup API Error:", error.message);
+    throw error;
   }
 };
 

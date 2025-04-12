@@ -58,7 +58,6 @@ const WelcomePage = () => {
         </div>
         
         <p className="text-center text-gray-500 text-sm mt-6">
-          © 2023 Campus Connect. All rights reserved.
         </p>
       </div>
     </div>

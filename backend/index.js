@@ -22,15 +22,15 @@ mongoose
 
 // Import Routes
 const authRoutes = require("./routes/auth");
-app.use("/api/auth", authRoutes); // Authentication routes
+app.use("/routes/auth", authRoutes); // Authentication routes
 
 const userRoutes = require("./routes/user");
-app.use("/api/user", userRoutes);
+app.use("/routes/user", userRoutes);
 
 // Import Routes
 const adminRoutes = require("./routes/adminRoutes");
 // Use Routes
-app.use("/api/admin", adminRoutes);
+app.use("/routes/admin", adminRoutes);
 
 
 

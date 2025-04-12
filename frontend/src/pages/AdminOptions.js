@@ -100,7 +100,7 @@ const AdminOptions = () => {
           </div>
           
           <p className="text-center text-gray-500 text-sm mt-6">
-            © 2023 Campus Connect - Administrative System
+            
           </p>
         </div>
       </div>

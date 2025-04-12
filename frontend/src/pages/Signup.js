@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { UserPlus } from 'lucide-react';
+import { signup } from "../api/api"; 
+
 
 const Signup = () => {
   const [formData, setFormData] = useState({
@@ -21,10 +23,15 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-
-    // Simulate signup for demonstration
-    alert("Signup successful!");
-    navigate("/login");
+        try{
+          const response = await signup(formData);
+          alert(response.msg);
+          navigate("/login");
+        }
+        catch(err) {
+          console.error("Signup Error:", err);  // 🔍 Log full error
+          setError(err?.msg || "Signup Failed. Please Try again");
+        }
   };
 
   return (
@@ -126,7 +133,6 @@ const Signup = () => {
         </div>
         
         <p className="text-center text-gray-500 text-sm mt-6">
-          © 2023 Campus Connect. All rights reserved.
         </p>
       </div>
     </div>

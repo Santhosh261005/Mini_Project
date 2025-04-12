@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogIn } from 'lucide-react';
+import { loginUser} from "../api/api";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +20,14 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    navigate("/home");
+    try{
+      const response = await loginUser(formData);
+      alert("Login Successful");
+      navigate("/home");
+    }
+    catch(err){
+      setError(err.msg || "Login Failed. Please Try again")
+    }
   };
 
   return (
@@ -85,7 +93,7 @@ const Login = () => {
         </div>
         
         <p className="text-center text-gray-500 text-sm mt-6">
-          © 2023 Campus Connect. All rights reserved.
+          
         </p>
       </div>
     </div>

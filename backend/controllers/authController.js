@@ -3,20 +3,21 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
-// User Signup (Matching Frontend Page Name)
-exports.Signup = async (req, res) => {  // ✅ Changed function name to "Signup"
+exports.Signup = async (req, res) => {
     try {
+        console.log("Incoming signup request:", req.body); // 👈 Add this
+
         const { fullName, rollNumber, contactNumber, email, password } = req.body;
 
-        // Check if user already exists
         let user = await User.findOne({ email });
-        if (user) return res.status(400).json({ msg: "User already exists" });
+        if (user) {
+            console.log("User already exists:", email); // 👈
+            return res.status(400).json({ msg: "User already exists" });
+        }
 
-        // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create new user
         user = new User({
             fullName,
             rollNumber,
@@ -26,10 +27,11 @@ exports.Signup = async (req, res) => {  // ✅ Changed function name to "Signup"
         });
 
         await user.save();
+        console.log("User registered:", user.email); // 👈
 
         res.status(201).json({ msg: "User registered successfully" });
     } catch (error) {
-        console.error(error);
+        console.error("Signup Error:", error);
         res.status(500).json({ msg: "Server error" });
     }
 };
