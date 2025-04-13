@@ -5,23 +5,10 @@ const API_URL = "http://localhost:5000/routes/auth";
 
 export const signup = async (userData) => {
   try {
-    const response = await fetch(`${API_URL}/Signup`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(userData),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(errorText);
-    }
-
-    return await response.json();
+    const response = await axios.post(`${API_URL}/Signup`, userData);
+    return response.data;
   } catch (error) {
-    console.error("Signup API Error:", error.message);
-    throw error;
+    throw error.response?.data || { message: "Signup failed. Please try again." };
   }
 };
 
