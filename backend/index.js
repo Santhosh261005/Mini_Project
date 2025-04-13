@@ -24,8 +24,8 @@ mongoose
 const authRoutes = require("./routes/auth");
 app.use("/routes/auth", authRoutes); // Authentication routes
 
-const userRoutes = require("./routes/user");
-app.use("/routes/user", userRoutes);
+//const userRoutes = require("./routes/user");
+//app.use("/routes/user", userRoutes);
 
 // Import Routes
 const adminRoutes = require("./routes/adminRoutes");
