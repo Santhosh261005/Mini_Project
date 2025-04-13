@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/api/admin"; // Change if deployed
+const API_BASE_URL = "http://localhost:5000/routes/admin"; // Change if deployed
 
 export const adminSignupUser = async (adminData) => {
   try {
