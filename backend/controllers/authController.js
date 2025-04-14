@@ -37,17 +37,26 @@ exports.Signup = async (req, res) => {
 };
 
 // User Login (Matching Frontend Page Name)
-exports.Login = async (req, res) => {  // ✅ Changed function name to "Login"
+exports.Login = async (req, res) => {
     try {
+        console.log('Login request received:', { email: req.body.email });
         const { email, password } = req.body;
 
         // Check if user exists
         let user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ msg: "Invalid credentials" });
+        console.log('User lookup result:', user ? 'Found' : 'Not found');
+        if (!user) {
+            console.log('Login failed: User not found');
+            return res.status(400).json({ msg: "Invalid credentials" });
+        }
 
         // Compare password
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+        console.log('Password comparison result:', isMatch);
+        if (!isMatch) {
+            console.log('Login failed: Password mismatch');
+            return res.status(400).json({ msg: "Invalid credentials" });
+        }
 
         // Generate JWT Token
         const payload = {

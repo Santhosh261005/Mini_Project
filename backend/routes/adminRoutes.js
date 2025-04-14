@@ -12,4 +12,8 @@ router.post("/login", adminController.adminLogin);
 router.get("/orphanage", adminAuth, adminController.getOrphanageDetails);
 router.put("/orphanage", adminAuth, adminController.updateOrphanageDetails);
 
+// Temporary test route (remove after debugging)
+router.post("/test-post", adminController.postRequirements); // Test route without auth
+router.post("/post", adminAuth, adminController.postRequirements); // Original route
+
 module.exports = router;

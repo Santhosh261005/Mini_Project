@@ -25,6 +25,7 @@ mongoose
 
 // Routes
 app.get("/", (req, res) => res.send("API Running"));
+app.get("/test-route", (req, res) => res.send("Test route working"));
 
 const authRoutes = require("./routes/auth");
 app.use("/api/auth", authRoutes);

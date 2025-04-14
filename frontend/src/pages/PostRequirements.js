@@ -89,7 +89,7 @@ const PostRequirements = () => {
         },
         body: JSON.stringify({
           adminName,  // Send admin name
-          requirements: filteredRequirements,
+          items: filteredRequirements,
         }),
       });
   

@@ -40,18 +40,15 @@ exports.adminSignup = async (req, res) => {
 exports.adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log('Login attempt for email:', req.body);
 
     // Find admin by email
     const admin = await Admin.findOne({ ownerEmail: email });
-    console.log('Admin found:', admin ? admin.ownerEmail : 'Not found');
     if (!admin) {
       return res.status(400).json({ msg: "Admin not found" });
     }
 
     // Check password
     const isMatch = await bcrypt.compare(password, admin.password);
-    console.log('Password match:', isMatch);
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }
@@ -68,7 +65,6 @@ exports.adminLogin = async (req, res) => {
 // Get Orphanage Details
 exports.getOrphanageDetails = async (req, res) => {
   try {
-    // Try both req.adminId and req.user.adminId for compatibility
     const adminId = req.adminId || (req.user && req.user.adminId);
     if (!adminId) {
       return res.status(401).json({ msg: "Admin ID not found in request" });
@@ -97,6 +93,71 @@ exports.getOrphanageDetails = async (req, res) => {
   }
 };
 
+// Post Requirements
+exports.postRequirements = async (req, res) => {
+  try {
+    const { adminName, requirements } = req.body;
+    console.log('Received requirements:', requirements); // Log incoming data
+
+    // Validate input
+    if (!adminName || !requirements) {
+      return res.status(400).json({ 
+        success: false,
+        msg: "Admin name and requirements are required"
+      });
+    }
+
+    if (!Array.isArray(requirements)) {
+      return res.status(400).json({ 
+        success: false,
+        msg: "Requirements must be an array"
+      });
+    }
+
+    // Validate each requirement
+    const validRequirements = requirements.filter(req => 
+      req.id && req.name && !isNaN(req.quantity) && req.quantity >= 0
+    );
+
+    if (validRequirements.length === 0) {
+      return res.status(400).json({ 
+        success: false,
+        msg: "No valid requirements provided"
+      });
+    }
+
+    // Save to database
+    const Requirement = require("../models/Requirement");
+    const newRequirements = new Requirement({
+      adminName,
+      items: validRequirements.map(req => ({
+        name: req.name,
+        quantity: req.quantity,
+        priority: req.priority || 'medium',
+        notes: req.notes || ''
+      })),
+      postedAt: new Date()
+    });
+
+    await newRequirements.save();
+    console.log('Successfully saved requirements');
+
+    res.status(200).json({ 
+      success: true,
+      msg: "Requirements posted successfully!",
+      data: newRequirements
+    });
+  } catch (error) {
+    console.error('Error posting requirements:', error);
+    res.status(500).json({ 
+      success: false,
+      msg: "Failed to save requirements",
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
+    });
+  }
+};
+
 // Update Orphanage Details
 exports.updateOrphanageDetails = async (req, res) => {
   try {
@@ -113,7 +174,6 @@ exports.updateOrphanageDetails = async (req, res) => {
       accreditation
     } = req.body;
 
-    // Try both req.adminId and req.user.adminId for compatibility
     const adminId = req.adminId || (req.user && req.user.adminId);
     if (!adminId) {
       return res.status(401).json({ msg: "Admin ID not found in request" });

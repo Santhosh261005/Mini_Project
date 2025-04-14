@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL of your backend (Change if running on a different port)
-const API_URL = "http://localhost:5000/routes/auth";
+const API_URL = "http://localhost:5000/api/auth"; // Updated to correct endpoint
 
 export const signup = async (userData) => {
   try {
