@@ -1,6 +1,5 @@
 // src/pages/Home.js
 import React from "react";
-import Navbar from "../components/Navbar";
 import { Link } from "react-router-dom";
 import bgImage from "../assets/background.png";
 
@@ -15,23 +14,6 @@ const Home = () => {
         backgroundRepeat: "no-repeat",
       }}
     >
-      <div className="absolute top-4 left-4 right-4 flex justify-between items-center">
-        <div className="text-white font-bold text-3xl">Campus Connect</div>
-        <div className="flex space-x-8">
-          <Link to="/dashboard" className="text-white hover:text-gray-300 text-xl font-semibold">
-            Dashboard
-          </Link>
-          <Link to="/donate" className="text-white hover:text-gray-300 text-xl font-semibold">
-            Donate Now
-          </Link>
-          <Link to="/chatbot" className="text-white hover:text-gray-300 text-xl font-semibold">
-            Chatbot
-          </Link>
-          <Link to="/rewards" className="text-white hover:text-gray-300 text-xl font-semibold">
-            Rewards
-          </Link>
-        </div>
-      </div>
       <h1 className="text-8xl font-extrabold text-orange-600">
         Let's Spread Happiness
       </h1>

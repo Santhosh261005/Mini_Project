@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LogIn } from 'lucide-react';
-import { loginUser} from "../api/api";
+import { loginUser } from "../api/api";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -20,13 +20,12 @@ const Login = () => {
     e.preventDefault();
     setError("");
 
-    try{
+    try {
       const response = await loginUser(formData);
       alert("Login Successful");
       navigate("/home");
-    }
-    catch(err){
-      setError(err.msg || "Login Failed. Please Try again")
+    } catch (err) {
+      setError(err.msg || "Login Failed. Please Try again");
     }
   };
 
@@ -47,7 +46,7 @@ const Login = () => {
               <h1 className="text-2xl font-bold text-white">Student Login</h1>
             </div>
           </div>
-          
+
           <div className="p-8">
             <h2 className="text-xl font-semibold text-center text-gray-800 mb-6">Enter your credentials</h2>
             {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
@@ -63,7 +62,7 @@ const Login = () => {
                   required
                 />
               </div>
-              
+
               <div>
                 <input
                   type="password"
@@ -74,7 +73,7 @@ const Login = () => {
                   required
                 />
               </div>
-              
+
               <button
                 type="submit"
                 className="flex items-center justify-center w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 transition-all duration-300 h-12 rounded-md shadow-md hover:shadow-lg group text-white p-2"
@@ -83,7 +82,7 @@ const Login = () => {
                 <span>Login</span>
               </button>
             </form>
-            
+
             <div className="mt-6 text-center">
               <a href="#" className="text-sm text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
                 Forgot your password?
@@ -91,10 +90,8 @@ const Login = () => {
             </div>
           </div>
         </div>
-        
-        <p className="text-center text-gray-500 text-sm mt-6">
-          
-        </p>
+
+        <p className="text-center text-gray-500 text-sm mt-6"></p>
       </div>
     </div>
   );

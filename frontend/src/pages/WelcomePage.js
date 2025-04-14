@@ -29,36 +29,25 @@ const WelcomePage = () => {
                 <LogIn className="mr-2 h-5 w-5 transition-transform group-hover:-translate-x-1" />
                 <span>Student Login</span>
               </Link>
-              
-              <Link to="/signup" className="flex items-center justify-center w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 transition-all duration-300 h-12 rounded-md shadow-md hover:shadow-lg group text-white p-2">
-                <UserPlus className="mr-2 h-5 w-5 transition-transform group-hover:rotate-12" />
-                <span>Student Signup</span>
-              </Link>
-              
-              <div className="relative py-3">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200"></div>
-                </div>
-                <div className="relative flex justify-center">
-                  <span className="bg-white px-4 text-sm text-gray-500">Administrator</span>
-                </div>
-              </div>
-              
+
               <Link to="/admin-login" className="flex items-center justify-center w-full border border-amber-500 text-amber-700 hover:bg-amber-50 transition-all duration-300 h-12 rounded-md shadow-sm hover:shadow-md group p-2">
                 <Shield className="mr-2 h-5 w-5 transition-all group-hover:text-amber-600" />
                 <span>Admin Login</span>
               </Link>
-              
-              <Link to="/admin-signup" className="flex items-center justify-center w-full border border-red-400 text-red-600 hover:bg-red-50 transition-all duration-300 h-12 rounded-md shadow-sm hover:shadow-md group p-2">
-                <Shield className="mr-2 h-5 w-5 transition-all group-hover:text-red-600" />
-                <span>Admin Signup</span>
-              </Link>
+            </div>
+
+            <div className="mt-6 text-center">
+              <p className="text-sm text-gray-500">
+                Don't have an account? 
+                <Link to="/signup" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-200"> Sign Up</Link>
+                <br />
+                Admin? <Link to="/admin-signup" className="text-amber-600 hover:text-amber-800 transition-colors duration-200">Create an Account</Link>
+              </p>
             </div>
           </div>
         </div>
         
-        <p className="text-center text-gray-500 text-sm mt-6">
-        </p>
+        <p className="text-center text-gray-500 text-sm mt-6"></p>
       </div>
     </div>
   );

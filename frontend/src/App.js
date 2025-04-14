@@ -1,7 +1,8 @@
 // src/App.js
 import React, { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import ErrorBoundary from './components/ErrorBoundary';
+import Navbar from './components/Navbar';
 import './App.css';
 
 // Lazy loaded components
@@ -27,9 +28,13 @@ function ProtectedRoute({ element, isAuthenticated }) {
 
 function App() {
   const isAuthenticated = false; // Replace with your authentication logic
+  const location = useLocation();
+const showNavbar = !['/', '/login', '/signup', '/admin-login', '/admin-signup'].includes(location.pathname);
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <>
+      {showNavbar && <Navbar />}
+      <Suspense fallback={<div>Loading...</div>}>
       <Routes>
         <Route path="/" element={<ErrorBoundary><WelcomePage /></ErrorBoundary>} />
         <Route path="/home" element={<ErrorBoundary><Home /></ErrorBoundary>} />
@@ -48,6 +53,7 @@ function App() {
         <Route path="*" element={<ErrorBoundary><div>404 - Not Found</div></ErrorBoundary>} />
       </Routes>
     </Suspense>
+    </>
   );
 }
 
