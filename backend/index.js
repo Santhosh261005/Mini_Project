@@ -33,6 +33,9 @@ app.use("/api/auth", authRoutes);
 const adminRoutes = require("./routes/adminRoutes");
 app.use("/api/admin", adminRoutes);
 
+const userRoutes = require("./routes/user");
+app.use("/api/user", userRoutes);
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);

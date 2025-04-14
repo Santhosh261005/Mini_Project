@@ -5,7 +5,8 @@ const Admin = require("../models/Admin");
 // Admin Signup Controller
 exports.adminSignup = async (req, res) => {
   try {
-    const { ownerName, ngoLocation, childrenCount, middleAgeCount, olderCount, establishmentYear, ownerEmail, password } = req.body;
+    console.log("Admin Signup Request Body:", req.body);
+    const { orphanageName, ownerName, ngoLocation, childrenCount, middleAgeCount, olderCount, establishmentYear, ownerEmail, password } = req.body;
 
     // Check if admin already exists
     let admin = await Admin.findOne({ ownerEmail });
@@ -18,7 +19,9 @@ exports.adminSignup = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, salt);
 
     // Save admin to DB
+    console.log("orphanageName value before save:", orphanageName);
     admin = new Admin({
+      orphanageName,
       ownerName,
       ngoLocation,
       childrenCount,
@@ -36,7 +39,6 @@ exports.adminSignup = async (req, res) => {
   }
 };
 
-// Admin Login Controller
 exports.adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -58,6 +60,7 @@ exports.adminLogin = async (req, res) => {
 
     res.status(200).json({ msg: "Login successful", token });
   } catch (error) {
+    console.error("Admin login error:", error); // Added detailed error logging
     res.status(500).json({ msg: "Server error", error: error.message });
   }
 };
@@ -167,6 +170,7 @@ exports.postRequirements = async (req, res) => {
   }
 };
 
+  
 // Update Orphanage Details
 exports.updateOrphanageDetails = async (req, res) => {
   try {
@@ -211,5 +215,44 @@ exports.updateOrphanageDetails = async (req, res) => {
     res.status(200).json({ msg: "Orphanage details updated successfully" });
   } catch (error) {
     res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
+exports.getVerifiedNgos = async (req, res) => {
+  try {
+    // Fetch all NGOs from Admin collection
+    // Assuming all Admin entries are verified NGOs; add filter if needed
+    const ngos = await Admin.find({}, {
+      orphanageName: 1,
+      ngoLocation: 1,
+      address: 1,
+      phone: 1,
+      email: 1,
+      website: 1,
+      mission: 1,
+      needs: 1,
+      requirements: 1
+    }).lean();
+
+    console.log("Fetched NGOs from DB:", ngos); // Added log
+
+    // Map to desired format
+    const formattedNgos = ngos.map(ngo => ({
+      id: ngo._id,
+      name: ngo.orphanageName || "Unnamed NGO",
+      location: ngo.ngoLocation || "",
+      address: ngo.address || "",
+      phone: ngo.phone || "",
+      email: ngo.email || "",
+      website: ngo.website || "",
+      mission: ngo.mission || "",
+      needs: ngo.needs || "",
+      requirements: ngo.requirements || []
+    }));
+
+    res.status(200).json({ ngos: formattedNgos });
+  } catch (error) {
+    console.error("Error fetching NGOs:", error);
+    res.status(500).json({ message: "Failed to fetch NGOs" });
   }
 };

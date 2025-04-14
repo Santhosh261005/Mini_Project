@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Minus, Trash2, PlusCircle } from "lucide-react";
 import Navbar from "../components/Navbar"; // Optional if you're using a shared navbar
+import { useLocation } from "react-router-dom";
+import { postDonation } from "../api/api";
 
 const DonateNow = () => {
   const allDonationTypes = ["books", "clothes", "stationery", "toys", "others"];
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Parse NGO ID from query parameters
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const ngoId = queryParams.get("ngoId");
 
   // Get available donation types (all types minus those already selected)
   const getAvailableTypes = () => {
@@ -13,14 +22,16 @@ const DonateNow = () => {
   };
 
   // Initialize with first available type if empty
-  if (items.length === 0 && getAvailableTypes().length > 0) {
-    setItems([{
-      id: Date.now(),
-      donationType: getAvailableTypes()[0],
-      description: "",
-      quantity: ""
-    }]);
-  }
+  useEffect(() => {
+    if (items.length === 0 && getAvailableTypes().length > 0) {
+      setItems([{
+        id: Date.now(),
+        donationType: getAvailableTypes()[0],
+        description: "",
+        quantity: ""
+      }]);
+    }
+  }, [items]);
 
   const handleIncrement = (id) => {
     setItems(items.map(item => 
@@ -63,8 +74,9 @@ const DonateNow = () => {
     setItems(items.filter(item => item.id !== id));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
 
     // Validate at least one item has quantity > 0
     const validItems = items.filter(item => {
@@ -77,15 +89,37 @@ const DonateNow = () => {
       return;
     }
 
-    alert(`Thank you for donating ${validItems.length} items! 🎉`);
-    setItems([
-      {
-        id: Date.now(),
-        donationType: "books",
-        description: "",
-        quantity: ""
-      }
-    ]);
+    if (!ngoId) {
+      alert("NGO ID is missing. Cannot submit donation.");
+      return;
+    }
+
+    const donationData = {
+      ngoId,
+      items: validItems.map(item => ({
+        donationType: item.donationType,
+        description: item.description,
+        quantity: parseInt(item.quantity)
+      }))
+    };
+
+    try {
+      setLoading(true);
+      await postDonation(donationData);
+      alert(`Thank you for donating ${validItems.length} items! 🎉`);
+      setItems([
+        {
+          id: Date.now(),
+          donationType: "books",
+          description: "",
+          quantity: ""
+        }
+      ]);
+    } catch (err) {
+      setError(err.msg || "Failed to submit donation. Please try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -100,6 +134,12 @@ const DonateNow = () => {
             Your small act of kindness can bring a big change. Choose what you
             want to donate and spread happiness!
           </p>
+
+          {error && (
+            <div className="bg-red-100 text-red-700 p-3 rounded mb-4 text-center">
+              {error}
+            </div>
+          )}
 
           <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
             {items.map((item, index) => (
@@ -197,9 +237,10 @@ const DonateNow = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition duration-200 shadow-md"
+            disabled={loading}
+            className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition duration-200 shadow-md ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
           >
-            Submit Donation
+            {loading ? "Submitting..." : "Submit Donation"}
           </button>
           </form>
         </div>

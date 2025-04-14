@@ -31,4 +31,28 @@ const getUserStats = async (req, res) => {
   }
 };
 
-module.exports = { getUserStats };
+const postDonation = async (req, res) => {
+  try {
+    const donorId = req.user.id;
+    const { ngoId, items } = req.body;
+
+    if (!items || !Array.isArray(items) || items.length === 0) {
+      return res.status(400).json({ message: "Donation items are required" });
+    }
+
+    const donation = new Donation({
+      donor: donorId,
+      ngo: ngoId || null,
+      items,
+    });
+
+    await donation.save();
+
+    res.status(201).json({ message: "Donation posted successfully", donation });
+  } catch (error) {
+    console.error("Error posting donation:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+module.exports = { getUserStats, postDonation };

@@ -35,3 +35,16 @@ export const fetchUserStats = async () => {
     throw error.response?.data || { msg: "Failed to fetch user stats" };
   }
 };
+
+export const postDonation = async (donationData) => {
+  try {
+    const token = localStorage.getItem("token");
+    const response = await axios.post("http://localhost:5000/api/user/donations", donationData, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Donation API Error:", error.response?.data || error.message);
+    throw error.response?.data || { msg: "Failed to post donation" };
+  }
+};

@@ -2,7 +2,7 @@ const API_BASE_URL = "http://localhost:5000/api/admin"; // Change if deployed
 
 export const adminSignupUser = async (adminData) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/signup`, {
+    const response = await fetch(API_BASE_URL + "/signup", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -22,10 +22,9 @@ export const adminSignupUser = async (adminData) => {
   }
 };
 
-
 export const adminLoginUser = async (loginData) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/login`, {
+      const response = await fetch(API_BASE_URL + "/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -47,11 +46,11 @@ export const adminLoginUser = async (loginData) => {
 
 export const getOrphanageDetails = async () => {
   try {
-    const response = await fetch(`${API_BASE_URL}/orphanage`, {
+    const response = await fetch(API_BASE_URL + "/orphanage", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
+        "Authorization": "Bearer " + localStorage.getItem('token')
       }
     });
 
@@ -69,11 +68,11 @@ export const getOrphanageDetails = async () => {
 
 export const updateOrphanageDetails = async (details) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/orphanage`, {
+    const response = await fetch(API_BASE_URL + "/orphanage", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${localStorage.getItem('token')}`
+        "Authorization": "Bearer " + localStorage.getItem('token')
       },
       body: JSON.stringify(details)
     });
@@ -85,6 +84,29 @@ export const updateOrphanageDetails = async (details) => {
     }
 
     return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+// New function to fetch verified NGOs
+export const getVerifiedNgos = async () => {
+  try {
+    const response = await fetch(API_BASE_URL + "/ngos", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + localStorage.getItem('token')
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Failed to fetch NGOs");
+    }
+
+    return data.ngos;
   } catch (error) {
     throw new Error(error.message);
   }

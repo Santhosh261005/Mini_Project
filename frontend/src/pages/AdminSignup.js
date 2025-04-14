@@ -4,6 +4,7 @@ import { adminSignupUser } from "../api/adminApi"; // Import the API function
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
+    orphanageName: '',
     ownerName: '',
     ngoLocation: '',
     childrenCount: 0,
@@ -45,6 +46,14 @@ const AdminSignup = () => {
         {error && <p className="text-red-500 text-sm">{error}</p>}
 
         <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            name="orphanageName"
+            placeholder="Orphanage Name"
+            className="w-full p-2 border rounded mt-2"
+            onChange={handleChange}
+            required
+          />
           <input
             type="text"
             name="ownerName"
