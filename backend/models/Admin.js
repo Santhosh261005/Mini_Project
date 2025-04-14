@@ -19,7 +19,13 @@ const AdminSchema = new mongoose.Schema({
   director: { type: String },
   mission: { type: String },
   needs: { type: String },
-  accreditation: { type: String }
+  accreditation: { type: String },
+  requirements: [{ // New field for storing requirements
+    name: { type: String, required: true },
+    quantity: { type: Number, required: true },
+    priority: { type: String, default: 'medium' },
+    notes: { type: String, default: '' }
+  }]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Admin", AdminSchema);

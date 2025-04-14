@@ -127,25 +127,34 @@ exports.postRequirements = async (req, res) => {
     }
 
     // Save to database
-    const Requirement = require("../models/Requirement");
-    const newRequirements = new Requirement({
-      adminName,
-      items: validRequirements.map(req => ({
-        name: req.name,
-        quantity: req.quantity,
-        priority: req.priority || 'medium',
-        notes: req.notes || ''
-      })),
-      postedAt: new Date()
-    });
+    const adminId = req.adminId || (req.user && req.user.adminId);
+    if (!adminId) {
+      return res.status(401).json({ msg: "Admin ID not found in request" });
+    }
 
-    await newRequirements.save();
+    // Find the admin and update their requirements
+    const updatedAdmin = await Admin.findByIdAndUpdate(
+      adminId,
+      {
+        requirements: validRequirements.map(req => ({
+          name: req.name,
+          quantity: req.quantity,
+          priority: req.priority || 'medium',
+          notes: req.notes || ''
+        }))
+      },
+      { new: true }
+    );
+
+    if (!updatedAdmin) {
+      return res.status(404).json({ msg: "Admin not found" });
+    }
     console.log('Successfully saved requirements');
 
     res.status(200).json({ 
       success: true,
       msg: "Requirements posted successfully!",
-      data: newRequirements
+      data: updatedAdmin.requirements // Return the updated requirements
     });
   } catch (error) {
     console.error('Error posting requirements:', error);
