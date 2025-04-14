@@ -1,6 +1,6 @@
 const express = require("express");
 const adminController = require("../controllers/adminController");
-const protect = require("../middlewares/authMiddleware");
+const adminAuth = require("../middlewares/adminAuthMiddleware");
 
 const router = express.Router();
 
@@ -9,7 +9,7 @@ router.post("/signup", adminController.adminSignup);
 router.post("/login", adminController.adminLogin);
 
 // Orphanage details routes (protected)
-router.get("/orphanage", protect, adminController.getOrphanageDetails);
-router.put("/orphanage", protect, adminController.updateOrphanageDetails);
+router.get("/orphanage", adminAuth, adminController.getOrphanageDetails);
+router.put("/orphanage", adminAuth, adminController.updateOrphanageDetails);
 
 module.exports = router;

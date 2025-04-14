@@ -65,7 +65,12 @@ exports.adminLogin = async (req, res) => {
 // Get Orphanage Details
 exports.getOrphanageDetails = async (req, res) => {
   try {
-    const admin = await Admin.findById(req.adminId);
+    // Try both req.adminId and req.user.adminId for compatibility
+    const adminId = req.adminId || (req.user && req.user.adminId);
+    if (!adminId) {
+      return res.status(401).json({ msg: "Admin ID not found in request" });
+    }
+    const admin = await Admin.findById(adminId);
     if (!admin) {
       return res.status(404).json({ msg: "Admin not found" });
     }
@@ -105,8 +110,13 @@ exports.updateOrphanageDetails = async (req, res) => {
       accreditation
     } = req.body;
 
+    // Try both req.adminId and req.user.adminId for compatibility
+    const adminId = req.adminId || (req.user && req.user.adminId);
+    if (!adminId) {
+      return res.status(401).json({ msg: "Admin ID not found in request" });
+    }
     const updatedAdmin = await Admin.findByIdAndUpdate(
-      req.adminId,
+      adminId,
       {
         orphanageName,
         address,

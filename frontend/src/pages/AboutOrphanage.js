@@ -2,13 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Home, Phone, Mail, Users, Calendar, Heart, MapPin } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import axios from 'axios';
+import { getOrphanageDetails, updateOrphanageDetails } from '../api/adminApi';
 
 const AboutOrphanage = () => {
   const navigate = useNavigate();
   const { userInfo } = useSelector((state) => state.auth);
   const isAdmin = userInfo?.role === 'admin';
-
+  
   const [editMode, setEditMode] = useState(false);
   const [orphanageDetails, setOrphanageDetails] = useState({
     orphanageName: "",
@@ -28,18 +28,28 @@ const AboutOrphanage = () => {
   useEffect(() => {
     const fetchOrphanageDetails = async () => {
       try {
-        const { data } = await axios.get('/api/admin/orphanage');
+        const data = await getOrphanageDetails();
         setOrphanageDetails({
           ...data,
           children: `${data.childrenCount} children`,
           staff: `${data.staffCount} staff members`
         });
+
+        // Auto-enable edit mode if all fields are empty but still show edit button
+        const isEmpty = Object.values(data).every(
+          val => val === null || val === undefined || val === ''
+        );
+        if (isEmpty) {
+          setEditMode(true);
+        } else {
+          setEditMode(false);
+        }
       } catch (error) {
         console.error('Error fetching orphanage details:', error);
       }
     };
     fetchOrphanageDetails();
-  }, []);
+  }, [isAdmin]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,13 +58,28 @@ const AboutOrphanage = () => {
 
   const handleSave = async () => {
     try {
-      await axios.put('/api/admin/orphanage', {
+      const response = await updateOrphanageDetails({
         ...orphanageDetails,
         childrenCount: parseInt(orphanageDetails.children),
         staffCount: parseInt(orphanageDetails.staff)
       });
+      
+      if (response.msg) {
+        alert(response.msg); // Show success message
+      }
+      
       setEditMode(false);
+      
+      // Refresh the data after saving
+      const data = await getOrphanageDetails();
+      setOrphanageDetails({
+        ...data,
+        children: `${data.childrenCount} children`,
+        staff: `${data.staffCount} staff members`
+      });
+      
     } catch (error) {
+      alert('Failed to save changes: ' + error.message);
       console.error('Error saving orphanage details:', error);
     }
   };
@@ -70,33 +95,31 @@ const AboutOrphanage = () => {
           Back to {isAdmin ? 'Dashboard' : 'Home'}
         </button>
 
-        {isAdmin && (
-          <div className="flex justify-end mb-4">
-            {editMode ? (
-              <div className="space-x-2">
-                <button 
-                  onClick={handleSave}
-                  className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
-                >
-                  Save Changes
-                </button>
-                <button 
-                  onClick={() => setEditMode(false)}
-                  className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : (
+        <div className="flex justify-end mb-4">
+          {editMode ? (
+            <div className="space-x-2">
               <button 
-                onClick={() => setEditMode(true)}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                onClick={handleSave}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
               >
-                Edit Details
+                Save Changes
               </button>
-            )}
-          </div>
-        )}
+              <button 
+                onClick={() => setEditMode(false)}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setEditMode(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >
+              Edit Details
+            </button>
+          )}
+        </div>
 
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-slate-700 to-blue-700 p-4">
