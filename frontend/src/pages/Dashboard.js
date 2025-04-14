@@ -41,9 +41,10 @@ const Dashboard = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-300 to-purple-300 p-8">
-      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
-        <div className="bg-gradient-to-r from-cyan-600 to-teal-600 p-4">
+    <div className="min-h-screen bg-gradient-to-r from-purple-200 to-pink-300 flex items-center justify-center p-6">
+      <div className="bg-white shadow-lg rounded-lg w-full max-w-2xl overflow-hidden">
+        {/* Vibrant gradient heading */}
+        <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-4">
           <h1 className="text-2xl font-bold text-white text-center">
             {isAuthenticated ? "Your Dashboard" : "Community Dashboard"}
           </h1>
@@ -58,16 +59,16 @@ const Dashboard = () => {
 
           {/* Stats */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-            <div className="bg-green-200 p-4 rounded-lg text-center">
+            <div className="bg-green-200 p-4 rounded-lg text-center shadow-md">
               <h2 className="text-2xl font-bold text-green-700">{stats.booksDonated}</h2>
               <p className="text-gray-700">Books Donated</p>
             </div>
-            <div className="bg-yellow-200 p-4 rounded-lg text-center">
+            <div className="bg-yellow-200 p-4 rounded-lg text-center shadow-md">
               <h2 className="text-2xl font-bold text-yellow-700">{stats.clothesDonated}</h2>
               <p className="text-gray-700">Clothes Donated</p>
             </div>
             {isAuthenticated && (
-              <div className="bg-blue-200 p-4 rounded-lg text-center">
+              <div className="bg-blue-200 p-4 rounded-lg text-center shadow-md">
                 <h2 className="text-2xl font-bold text-blue-700">{stats.pointsEarned}</h2>
                 <p className="text-gray-700">Points Earned</p>
               </div>
@@ -82,7 +83,7 @@ const Dashboard = () => {
             <ul className="mt-4 space-y-3">
               {stats.recentDonations.length > 0 ? (
                 stats.recentDonations.map((donation, index) => (
-                  <li key={index} className="bg-gray-100 p-3 rounded-lg">
+                  <li key={index} className="bg-gray-100 p-3 rounded-lg shadow-sm">
                     📦 {isAuthenticated ? "You" : "Someone"} donated {donation.quantity}{" "}
                     {donation.category} to {donation.recipient}
                   </li>
@@ -99,13 +100,13 @@ const Dashboard = () => {
           <div className="mt-8 text-center">
             <Link
               to="/donate"
-              className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg shadow-lg hover:bg-blue-700 transition-colors"
+              className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg shadow-lg hover:from-purple-700 hover:to-pink-700 transition-colors"
             >
               {isAuthenticated ? "Donate More" : "Join and Donate"}
             </Link>
             {!isAuthenticated && (
               <p className="mt-4 text-sm text-gray-600">
-                <Link to="/login" className="text-blue-600 hover:underline">
+                <Link to="/login" className="text-purple-600 hover:underline">
                   Sign in
                 </Link>{" "}
                 to track your personal contributions

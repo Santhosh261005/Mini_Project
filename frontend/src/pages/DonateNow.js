@@ -1,106 +1,198 @@
-import React, { useState } from "react";
-import { Plus, Minus } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Plus, Minus, Trash2, PlusCircle } from "lucide-react";
 import Navbar from "../components/Navbar"; // Optional if you're using a shared navbar
 
 const DonateNow = () => {
-  const [donationType, setDonationType] = useState("books");
-  const [description, setDescription] = useState("");
-  const [quantity, setQuantity] = useState(0);
+  const allDonationTypes = ["books", "clothes", "stationery", "toys", "others"];
+  const [items, setItems] = useState([]);
 
-  const handleIncrement = () => {
-    setQuantity((prev) => prev + 1);
+  // Get available donation types (all types minus those already selected)
+  const getAvailableTypes = () => {
+    const selectedTypes = items.map(item => item.donationType);
+    return allDonationTypes.filter(type => !selectedTypes.includes(type));
   };
 
-  const handleDecrement = () => {
-    setQuantity((prev) => (prev > 0 ? prev - 1 : 0));
+  // Initialize with first available type if empty
+  if (items.length === 0 && getAvailableTypes().length > 0) {
+    setItems([{
+      id: Date.now(),
+      donationType: getAvailableTypes()[0],
+      description: "",
+      quantity: ""
+    }]);
+  }
+
+  const handleIncrement = (id) => {
+    setItems(items.map(item => 
+      item.id === id 
+        ? { ...item, quantity: (parseInt(item.quantity) || 0) + 1 }
+        : item
+    ));
+  };
+
+  const handleDecrement = (id) => {
+    setItems(items.map(item => 
+      item.id === id 
+        ? { ...item, quantity: Math.max((parseInt(item.quantity) || 0) - 1, 0) }
+        : item
+    ));
+  };
+
+  const handleItemChange = (id, field, value) => {
+    setItems(items.map(item => 
+      item.id === id ? { ...item, [field]: value } : item
+    ));
+  };
+
+  const addNewItem = () => {
+    const availableTypes = getAvailableTypes();
+    if (availableTypes.length > 0) {
+      setItems([
+        ...items,
+        {
+          id: Date.now(),
+          donationType: availableTypes[0],
+          description: "",
+          quantity: ""
+        }
+      ]);
+    }
+  };
+
+  const removeItem = (id) => {
+    setItems(items.filter(item => item.id !== id));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (quantity <= 0) {
-      alert("Please enter a quantity greater than 0.");
+    // Validate at least one item has quantity > 0
+    const validItems = items.filter(item => {
+      const qty = parseInt(item.quantity);
+      return !isNaN(qty) && qty > 0;
+    });
+
+    if (validItems.length === 0) {
+      alert("Please enter valid quantities for at least one item.");
       return;
     }
 
-    alert(`Thank you for donating ${quantity} ${donationType}! 🎉`);
-    setDonationType("books");
-    setDescription("");
-    setQuantity(0);
+    alert(`Thank you for donating ${validItems.length} items! 🎉`);
+    setItems([
+      {
+        id: Date.now(),
+        donationType: "books",
+        description: "",
+        quantity: ""
+      }
+    ]);
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-blue-100 to-purple-100 flex flex-col items-center justify-center py-12 px-4">
-      {/* Optional Navbar */}
-      {/* <Navbar /> */}
+    <div className="min-h-screen bg-gradient-to-r from-purple-200 to-indigo-300 p-8">
+      <div className="max-w-4xl mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+        <div className="bg-gradient-to-r from-purple-600 to-indigo-600 p-4">
+          <h1 className="text-2xl font-bold text-white text-center">Donate Now</h1>
+        </div>
 
-      <div className="bg-white shadow-xl rounded-xl w-full max-w-xl p-8 border border-gray-200">
-        <h1 className="text-3xl font-bold text-center text-indigo-700">Donate Now</h1>
-        <p className="text-gray-600 text-center mt-2">
-          Your small act of kindness can bring a big change. Choose what you
-          want to donate and spread happiness!
-        </p>
+        <div className="p-6">
+          <p className="text-gray-600 text-center">
+            Your small act of kindness can bring a big change. Choose what you
+            want to donate and spread happiness!
+          </p>
 
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
-          {/* Donation Type */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">
-              What would you like to donate?
-            </label>
-            <select
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              value={donationType}
-              onChange={(e) => setDonationType(e.target.value)}
-            >
-              <option value="books">📚 Books</option>
-              <option value="clothes">👕 Clothes</option>
-              <option value="stationery">✏️ Stationery</option>
-              <option value="toys">🧸 Toys</option>
-              <option value="others">🔄 Others</option>
-            </select>
-          </div>
+          <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
+            {items.map((item, index) => (
+              <div key={item.id} className="border-b pb-4 mb-4">
+                <div className="flex justify-between items-center mb-2">
+                <h3 className="font-semibold text-gray-700">Item {index + 1}</h3>
+                {items.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeItem(item.id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
 
-          {/* Quantity Selector */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Quantity</label>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={handleDecrement}
-                className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
-              >
-                <Minus className="h-5 w-5" />
-              </button>
-              <input
-                type="number"
-                value={quantity}
-                onChange={(e) => {
-                  const val = parseInt(e.target.value, 10);
-                  if (!isNaN(val) && val >= 0) setQuantity(val);
-                }}
-                className="w-16 text-center border p-2 rounded-md"
-              />
-              <button
-                type="button"
-                onClick={handleIncrement}
-                className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
-              >
-                <Plus className="h-5 w-5" />
-              </button>
+              {/* Donation Type */}
+              <div>
+                <label className="block text-gray-700 font-semibold mb-1">
+                  What would you like to donate?
+                </label>
+                <select
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  value={item.donationType}
+                  onChange={(e) => handleItemChange(item.id, 'donationType', e.target.value)}
+                >
+                  {getAvailableTypes().concat(item.donationType).map(type => (
+                    <option key={type} value={type}>
+                      {type === "books" && "📚 Books"}
+                      {type === "clothes" && "👕 Clothes"}
+                      {type === "stationery" && "✏️ Stationery"}
+                      {type === "toys" && "🧸 Toys"}
+                      {type === "others" && "🔄 Others"}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Quantity Selector */}
+              <div>
+                <label className="block text-gray-700 font-semibold mb-1">Quantity</label>
+                <div className="flex items-center space-x-2">
+                  <button
+                    type="button"
+                    onClick={() => handleDecrement(item.id)}
+                    className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
+                  >
+                    <Minus className="h-5 w-5" />
+                  </button>
+                  <input
+                    type="number"
+                    value={item.quantity}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      handleItemChange(item.id, 'quantity', val === '' ? '' : parseInt(val) || 0);
+                    }}
+                    min="0"
+                    className="w-16 text-center border p-2 rounded-md"
+                    placeholder="0"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleIncrement(item.id)}
+                    className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
+                  >
+                    <Plus className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div>
+                <label className="block text-gray-700 font-semibold mb-1">Description</label>
+                <textarea
+                  rows="3"
+                  placeholder="Provide more details about your donation..."
+                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                  value={item.description}
+                  onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
+                />
+              </div>
             </div>
-          </div>
+          ))}
 
-          {/* Description */}
-          <div>
-            <label className="block text-gray-700 font-semibold mb-1">Description</label>
-            <textarea
-              rows="4"
-              placeholder="Provide more details about your donation..."
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
+          <button
+            type="button"
+            onClick={addNewItem}
+            className="flex items-center justify-center w-full py-2 text-indigo-600 hover:text-indigo-800 font-medium"
+          >
+            <PlusCircle className="h-5 w-5 mr-2" />
+            Add Another Item
+          </button>
 
           {/* Submit Button */}
           <button
@@ -109,7 +201,8 @@ const DonateNow = () => {
           >
             Submit Donation
           </button>
-        </form>
+          </form>
+        </div>
       </div>
     </div>
   );

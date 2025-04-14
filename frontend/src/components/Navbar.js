@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import "./Navbar.css";
 
-const Navbar = ({ children }) => {
+const Navbar = () => {
   return (
     <nav className="flex justify-between items-center py-4 px-6 bg-black/50">
       {/* Logo Section */}
@@ -52,7 +52,12 @@ const Navbar = ({ children }) => {
           </li>
           <li>
             <Link to="/ngo" className="text-white hover:text-orange-500 drop-shadow-md">
-              Ngos
+              NGOs
+            </Link>
+          </li>
+          <li>
+            <Link to="/aboutus" className="text-white hover:text-orange-500 drop-shadow-md">
+              About Us
             </Link>
           </li>
         </ul>
@@ -62,7 +67,6 @@ const Navbar = ({ children }) => {
           Book Now
         </button>
       </div>
-      {children}
     </nav>
   );
 };

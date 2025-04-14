@@ -40,15 +40,18 @@ exports.adminSignup = async (req, res) => {
 exports.adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
+    console.log('Login attempt for email:', req.body);
 
     // Find admin by email
     const admin = await Admin.findOne({ ownerEmail: email });
+    console.log('Admin found:', admin ? admin.ownerEmail : 'Not found');
     if (!admin) {
       return res.status(400).json({ msg: "Admin not found" });
     }
 
     // Check password
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log('Password match:', isMatch);
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid credentials" });
     }

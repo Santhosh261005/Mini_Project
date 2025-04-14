@@ -1,3 +1,4 @@
+// Update to App.js
 // src/App.js
 import React, { lazy, Suspense } from 'react';
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
@@ -19,42 +20,43 @@ const AdminSignup = lazy(() => import('./pages/AdminSignup'));
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const PostRequirements = lazy(() => import('./pages/PostRequirements'));
 const AboutOrphanage = lazy(() => import('./pages/AboutOrphanage'));
-const AdminOptions = lazy(() => import('./pages/AdminOptions')); // Added AdminOptions import
+const AdminOptions = lazy(() => import('./pages/AdminOptions'));
 const Ngo = lazy(() => import('./pages/Ngo'));
+const AboutUs = lazy(() => import('./pages/AboutUs'));
 
-// Protected Route component
 function ProtectedRoute({ element, isAuthenticated }) {
   return isAuthenticated ? element : <Navigate to="/login" />;
 }
 
 function App() {
-  const isAuthenticated = false; // Replace with your authentication logic
+  const isAuthenticated = false;
   const location = useLocation();
-const showNavbar = !['/', '/login', '/signup', '/admin-login', '/admin-signup'].includes(location.pathname);
+  const showNavbar = !['/', '/login', '/signup', '/admin-login', '/admin-signup'].includes(location.pathname);
 
   return (
     <>
       {showNavbar && <Navbar />}
       <Suspense fallback={<div>Loading...</div>}>
-      <Routes>
-        <Route path="/" element={<ErrorBoundary><WelcomePage /></ErrorBoundary>} />
-        <Route path="/home" element={<ErrorBoundary><Home /></ErrorBoundary>} />
-        <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
-        <Route path="/donate" element={<ErrorBoundary><DonateNow /></ErrorBoundary>} />
-        <Route path="/chatbot" element={<ErrorBoundary><Chatbot /></ErrorBoundary>} />
-        <Route path="/rewards" element={<ErrorBoundary><Rewards /></ErrorBoundary>} />
-        <Route path="/ngo" element={<ErrorBoundary><Ngo /></ErrorBoundary>} />
-        <Route path="/login" element={<ErrorBoundary><Login /></ErrorBoundary>} />
-        <Route path="/signup" element={<ErrorBoundary><Signup /></ErrorBoundary>} />
-        <Route path="/admin-login" element={<ErrorBoundary><AdminLogin /></ErrorBoundary>} />
-        <Route path="/admin-signup" element={<ErrorBoundary><AdminSignup /></ErrorBoundary>} />
-        <Route path="/admin-dashboard" element={<ErrorBoundary><ProtectedRoute element={<AdminDashboard />} isAuthenticated={isAuthenticated} /></ErrorBoundary>} />
-        <Route path="/post-requirements" element={<ErrorBoundary><PostRequirements /></ErrorBoundary>} />
-        <Route path="/about-orphanage" element={<ErrorBoundary><AboutOrphanage /></ErrorBoundary>} />
-        <Route path="/admin-options" element={<ErrorBoundary><AdminOptions /></ErrorBoundary>} /> {/* Added AdminOptions route */}
-        <Route path="*" element={<ErrorBoundary><div>404 - Not Found</div></ErrorBoundary>} />
-      </Routes>
-    </Suspense>
+        <Routes>
+          <Route path="/" element={<ErrorBoundary><WelcomePage /></ErrorBoundary>} />
+          <Route path="/home" element={<ErrorBoundary><Home /></ErrorBoundary>} />
+          <Route path="/dashboard" element={<ErrorBoundary><Dashboard /></ErrorBoundary>} />
+          <Route path="/donate" element={<ErrorBoundary><DonateNow /></ErrorBoundary>} />
+          <Route path="/chatbot" element={<ErrorBoundary><Chatbot /></ErrorBoundary>} />
+          <Route path="/rewards" element={<ErrorBoundary><Rewards /></ErrorBoundary>} />
+          <Route path="/ngo" element={<ErrorBoundary><Ngo /></ErrorBoundary>} />
+          <Route path="/aboutus" element={<ErrorBoundary><AboutUs /></ErrorBoundary>} />
+          <Route path="/login" element={<ErrorBoundary><Login /></ErrorBoundary>} />
+          <Route path="/signup" element={<ErrorBoundary><Signup /></ErrorBoundary>} />
+          <Route path="/admin-login" element={<ErrorBoundary><AdminLogin /></ErrorBoundary>} />
+          <Route path="/admin-signup" element={<ErrorBoundary><AdminSignup /></ErrorBoundary>} />
+          <Route path="/admin-dashboard" element={<ErrorBoundary><ProtectedRoute element={<AdminDashboard />} isAuthenticated={isAuthenticated} /></ErrorBoundary>} />
+          <Route path="/post-requirements" element={<ErrorBoundary><PostRequirements /></ErrorBoundary>} />
+          <Route path="/about-orphanage" element={<ErrorBoundary><AboutOrphanage /></ErrorBoundary>} />
+          <Route path="/admin-options" element={<ErrorBoundary><AdminOptions /></ErrorBoundary>} />
+          <Route path="*" element={<ErrorBoundary><div>404 - Not Found</div></ErrorBoundary>} />
+        </Routes>
+      </Suspense>
     </>
   );
 }
