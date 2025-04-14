@@ -20,6 +20,7 @@ const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
 const PostRequirements = lazy(() => import('./pages/PostRequirements'));
 const AboutOrphanage = lazy(() => import('./pages/AboutOrphanage'));
 const AdminOptions = lazy(() => import('./pages/AdminOptions')); // Added AdminOptions import
+const Ngo = lazy(() => import('./pages/Ngo'));
 
 // Protected Route component
 function ProtectedRoute({ element, isAuthenticated }) {
@@ -42,6 +43,7 @@ const showNavbar = !['/', '/login', '/signup', '/admin-login', '/admin-signup'].
         <Route path="/donate" element={<ErrorBoundary><DonateNow /></ErrorBoundary>} />
         <Route path="/chatbot" element={<ErrorBoundary><Chatbot /></ErrorBoundary>} />
         <Route path="/rewards" element={<ErrorBoundary><Rewards /></ErrorBoundary>} />
+        <Route path="/ngo" element={<ErrorBoundary><Ngo /></ErrorBoundary>} />
         <Route path="/login" element={<ErrorBoundary><Login /></ErrorBoundary>} />
         <Route path="/signup" element={<ErrorBoundary><Signup /></ErrorBoundary>} />
         <Route path="/admin-login" element={<ErrorBoundary><AdminLogin /></ErrorBoundary>} />

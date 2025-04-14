@@ -50,6 +50,11 @@ const Navbar = ({ children }) => {
               Rewards
             </Link>
           </li>
+          <li>
+            <Link to="/ngo" className="text-white hover:text-orange-500 drop-shadow-md">
+              Ngos
+            </Link>
+          </li>
         </ul>
 
         {/* Book Now Button */}
