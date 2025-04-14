@@ -1,57 +1,74 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-
-const rewardsData = [
-  { title: "Bronze Donor", points: 50, color: "bg-yellow-500" },
-  { title: "Silver Donor", points: 100, color: "bg-gray-400" },
-  { title: "Gold Donor", points: 200, color: "bg-yellow-300" },
-  { title: "Platinum Donor", points: 500, color: "bg-blue-500" },
-];
-
-const userPoints = 120; // Example: Adjust based on user data
+import { Gift, Star, Award } from "lucide-react";
 
 const Rewards = () => {
-  const navigate = useNavigate(); // React Router hook for navigation
+  const rewards = [
+    {
+      name: "Bronze Donor",
+      points: 100,
+      icon: <Star className="h-8 w-8 text-amber-600" />,
+      description: "Earned by donating 5+ items",
+    },
+    {
+      name: "Silver Donor",
+      points: 250,
+      icon: <Star className="h-8 w-8 text-gray-400" />,
+      description: "Earned by donating 15+ items",
+    },
+    {
+      name: "Gold Donor",
+      points: 500,
+      icon: <Star className="h-8 w-8 text-yellow-500" />,
+      description: "Earned by donating 30+ items",
+    },
+    {
+      name: "Platinum Donor",
+      points: 1000,
+      icon: <Award className="h-8 w-8 text-blue-500" />,
+      description: "Earned by donating 50+ items",
+    },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-purple-300 to-blue-300 flex flex-col items-center justify-center p-6">
-      <div className="bg-white shadow-lg rounded-lg w-full max-w-md p-6">
-        <h1 className="text-2xl font-bold text-center text-gray-800">🎉 Your Rewards 🎉</h1>
-        <p className="text-gray-600 text-center">Earn points for each donation and unlock special badges!</p>
-
-        {/* Progress Bar */}
-        <div className="mt-4 w-full bg-gray-200 rounded-full h-4">
-          <div
-            className="bg-blue-500 h-4 rounded-full transition-all"
-            style={{ width: `${(userPoints / 500) * 100}%` }}
-          ></div>
+    <div className="min-h-screen bg-white p-8 flex justify-center items-center">
+      <div className="bg-white shadow-lg rounded-lg overflow-hidden max-w-lg w-full">
+        <div className="bg-gradient-to-r from-amber-600 to-orange-600 p-4">
+          <h1 className="text-2xl font-bold text-white text-center">Your Rewards</h1>
         </div>
-        <p className="text-center text-sm text-gray-700 mt-1">{userPoints} / 500 Points</p>
+        <div className="p-6">
+          <p className="text-gray-600 text-center mb-6">
+            Track your donation progress and unlock special rewards!
+          </p>
 
-        {/* Rewards Badges */}
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          {rewardsData.map((reward, index) => (
-            <div
-              key={index}
-              className={`p-4 rounded-lg text-white text-center shadow-lg ${
-                userPoints >= reward.points ? reward.color : "bg-gray-300"
-              }`}
-            >
-              {reward.title}
+          <div className="space-y-6">
+            {rewards.map((reward, index) => (
+              <div
+                key={index}
+                className="flex items-center p-4 border rounded-lg"
+              >
+                <div className="mr-4">{reward.icon}</div>
+                <div>
+                  <h3 className="font-semibold text-gray-800">{reward.name}</h3>
+                  <p className="text-sm text-gray-600">{reward.description}</p>
+                  <p className="text-sm font-medium text-emerald-600 mt-1">
+                    {reward.points} points
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 bg-blue-50 p-4 rounded-lg">
+            <div className="flex items-center">
+              <Gift className="h-6 w-6 text-blue-600 mr-2" />
+              <h3 className="font-semibold text-blue-800">
+                Next Reward: Diamond Donor (2000 points)
+              </h3>
             </div>
-          ))}
-        </div>
-
-        {/* Encourage More Donations */}
-        <div className="mt-6 text-center">
-          <p className="text-gray-700">Donate more to unlock higher tiers and exclusive rewards!</p>
-          <button
-            onClick={() => navigate("/donate-now")} // Redirect to Donate Now page
-            className="inline-block mt-4 bg-green-500 text-white px-6 py-2 rounded-lg shadow-md hover:bg-green-600 transition"
-          >
-            Donate Now
-          </button>
+            <p className="text-sm text-blue-600 mt-2">
+              Donate 100+ items to unlock this exclusive reward!
+            </p>
+          </div>
         </div>
       </div>
     </div>

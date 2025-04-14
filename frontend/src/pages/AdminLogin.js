@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { adminLoginUser } from "../api/adminApi"; // Import the API function
+import { useNavigate, Link } from 'react-router-dom';
+import { adminLoginUser } from "../api/adminApi";
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -15,17 +15,16 @@ const AdminLogin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     try {
       const response = await adminLoginUser(formData);
-      alert(response.msg); // Success message from backend
-      localStorage.setItem("adminToken", response.token); // Store token
+      alert(response.msg);
+      localStorage.setItem("adminToken", response.token);
       navigate("/admin-options");
     } catch (err) {
       alert(err.message);
     }
   };
-
 
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
@@ -67,6 +66,17 @@ const AdminLogin = () => {
             Login
           </button>
         </form>
+
+        {/* 👇 New Create Account link */}
+        <div className="mt-4 text-center">
+          <p className="text-sm text-gray-600">
+            Don&apos;t have an account?{" "}
+            <Link to="/admin-signup" className="text-indigo-600 hover:text-indigo-800 font-medium">
+              Create one
+            </Link>
+          </p>
+        </div>
+
       </div>
     </div>
   );

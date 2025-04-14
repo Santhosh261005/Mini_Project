@@ -1,4 +1,6 @@
 {
+  "name": "mini-project-frontend",
+  "version": "1.0.0",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -9,6 +11,8 @@
   "dependencies": {
     "@svgr/plugin-svgo": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
+    "ajv": "^8.17.1",
+    "ajv-keywords": "^3.5.2",
     "axios": "^1.8.4",
     "css-select": "^5.1.0",
     "lucide-react": "^0.484.0",
@@ -18,6 +22,8 @@
     "postcss-selector-matches": "^4.0.0",
     "postcss-selector-not": "^8.0.1",
     "postcss-unique-selectors": "^7.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "react-router-dom": "^7.4.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^11.0.5",
