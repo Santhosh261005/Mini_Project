@@ -9,6 +9,17 @@ const AdminSchema = new mongoose.Schema({
   establishmentYear: { type: String, required: true },
   ownerEmail: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-});
+  // New fields for orphanage details
+  orphanageName: { type: String },
+  address: { type: String },
+  phone: { type: String },
+  email: { type: String },
+  website: { type: String },
+  staffCount: { type: String },
+  director: { type: String },
+  mission: { type: String },
+  needs: { type: String },
+  accreditation: { type: String }
+}, { timestamps: true });
 
 module.exports = mongoose.model("Admin", AdminSchema);

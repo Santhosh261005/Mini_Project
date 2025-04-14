@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000/routes/admin"; // Change if deployed
+const API_BASE_URL = "http://localhost:5000/api/admin"; // Change if deployed
 
 export const adminSignupUser = async (adminData) => {
   try {
@@ -43,4 +43,49 @@ export const adminLoginUser = async (loginData) => {
     } catch (error) {
       throw new Error(error.message);
     }
-  };
+};
+
+export const getOrphanageDetails = async () => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/orphanage`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      }
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.msg || "Failed to fetch orphanage details");
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};
+
+export const updateOrphanageDetails = async (details) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/orphanage`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem('token')}`
+      },
+      body: JSON.stringify(details)
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.msg || "Failed to update orphanage details");
+    }
+
+    return data;
+  } catch (error) {
+    throw new Error(error.message);
+  }
+};

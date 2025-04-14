@@ -20,7 +20,7 @@ const AdminLogin = () => {
     try {
       const response = await adminLoginUser(formData);
       alert(response.msg); // Success message from backend
-      localStorage.setItem("adminToken", response.token); // Store token
+      localStorage.setItem("token", response.token); // Store token
       navigate("/admin-options");
     } catch (err) {
       alert(err.message);

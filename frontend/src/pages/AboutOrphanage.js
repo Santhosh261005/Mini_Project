@@ -1,55 +1,158 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, Home, Phone, Mail, Users, Calendar, Heart, MapPin } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { getOrphanageDetails, updateOrphanageDetails } from '../api/adminApi';
 
 const AboutOrphanage = () => {
   const navigate = useNavigate();
+  const { userInfo } = useSelector((state) => state.auth);
+  const isAdmin = userInfo?.role === 'admin';
+  
+  const [editMode, setEditMode] = useState(false);
+  const [orphanageDetails, setOrphanageDetails] = useState({
+    orphanageName: "",
+    established: "",
+    address: "",
+    phone: "",
+    email: "",
+    website: "",
+    children: "",
+    staff: "",
+    director: "",
+    mission: "",
+    needs: "",
+    accreditation: ""
+  });
 
-  const orphanageDetails = {
-    name: "Sunshine Children's Home",
-    established: "1995",
-    address: "123 Hope Street, Cityville, State 12345",
-    phone: "+1 (555) 123-4567",
-    email: "contact@sunshinechildren.org",
-    website: "www.sunshinechildren.org",
-    children: "45 children (ages 3-17)",
-    staff: "15 full-time staff members",
-    director: "Dr. Sarah Johnson",
-    mission: "To provide a loving, supportive, and educational environment for orphaned and vulnerable children, empowering them to become confident and productive members of society.",
-    needs: "Volunteers, educational materials, clothing, toys, and financial support",
-    accreditation: "Licensed by the State Department of Child Services"
+  useEffect(() => {
+    const fetchOrphanageDetails = async () => {
+      try {
+        const data = await getOrphanageDetails();
+        setOrphanageDetails({
+          ...data,
+          children: `${data.childrenCount} children`,
+          staff: `${data.staffCount} staff members`
+        });
+
+        // Auto-enable edit mode if all fields are empty but still show edit button
+        const isEmpty = Object.values(data).every(
+          val => val === null || val === undefined || val === ''
+        );
+        if (isEmpty) {
+          setEditMode(true);
+        } else {
+          setEditMode(false);
+        }
+      } catch (error) {
+        console.error('Error fetching orphanage details:', error);
+      }
+    };
+    fetchOrphanageDetails();
+  }, [isAdmin]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setOrphanageDetails(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSave = async () => {
+    try {
+      const response = await updateOrphanageDetails({
+        ...orphanageDetails,
+        childrenCount: parseInt(orphanageDetails.children),
+        staffCount: parseInt(orphanageDetails.staff)
+      });
+      
+      if (response.msg) {
+        alert(response.msg); // Show success message
+      }
+      
+      setEditMode(false);
+      
+      // Refresh the data after saving
+      const data = await getOrphanageDetails();
+      setOrphanageDetails({
+        ...data,
+        children: `${data.childrenCount} children`,
+        staff: `${data.staffCount} staff members`
+      });
+      
+    } catch (error) {
+      alert('Failed to save changes: ' + error.message);
+      console.error('Error saving orphanage details:', error);
+    }
   };
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-blue-50">
-      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-slate-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
-      </div>
-      
       <div className="relative z-10 max-w-5xl mx-auto px-4 py-12">
         <button 
-          onClick={() => navigate('/admin-options')}
+          onClick={() => navigate(isAdmin ? '/admin-options' : '/')}
           className="mb-6 flex items-center text-blue-600 hover:text-blue-800 transition-colors"
         >
           <ArrowLeft className="mr-2 h-4 w-4" />
-          Back to Dashboard
+          Back to {isAdmin ? 'Dashboard' : 'Home'}
         </button>
-        
+
+        <div className="flex justify-end mb-4">
+          {editMode ? (
+            <div className="space-x-2">
+              <button 
+                onClick={handleSave}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-md"
+              >
+                Save Changes
+              </button>
+              <button 
+                onClick={() => setEditMode(false)}
+                className="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-md"
+              >
+                Cancel
+              </button>
+            </div>
+          ) : (
+            <button 
+              onClick={() => setEditMode(true)}
+              className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+            >
+              Edit Details
+            </button>
+          )}
+        </div>
+
         <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden">
           <div className="bg-gradient-to-r from-slate-700 to-blue-700 p-4">
             <h1 className="text-2xl font-bold text-white text-center">About Our Orphanage</h1>
           </div>
-          
+
           <div className="p-6">
             <div className="mb-10 text-center">
-              <h2 className="text-3xl font-bold text-gray-800 mb-4">{orphanageDetails.name}</h2>
-              <p className="text-gray-600 max-w-2xl mx-auto">
-                {orphanageDetails.mission}
-              </p>
+              {editMode ? (
+                <input
+                  type="text"
+                  name="orphanageName"
+                  value={orphanageDetails.orphanageName}
+                  onChange={handleInputChange}
+                  className="text-3xl font-bold text-gray-800 mb-4 w-full text-center border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <h2 className="text-3xl font-bold text-gray-800 mb-4">{orphanageDetails.orphanageName}</h2>
+              )}
+              {editMode ? (
+                <textarea
+                  name="mission"
+                  value={orphanageDetails.mission}
+                  onChange={handleInputChange}
+                  className="text-gray-600 max-w-2xl mx-auto w-full h-24 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                />
+              ) : (
+                <p className="text-gray-600 max-w-2xl mx-auto">
+                  {orphanageDetails.mission}
+                </p>
+              )}
             </div>
-            
+
             <div className="grid md:grid-cols-2 gap-8">
               <div className="space-y-6">
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
@@ -61,33 +164,73 @@ const AboutOrphanage = () => {
                   <div className="space-y-3">
                     <div className="flex items-start">
                       <MapPin className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Address:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.address}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="address"
+                            value={orphanageDetails.address}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.address}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex items-start">
                       <Phone className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Phone:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.phone}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="phone"
+                            value={orphanageDetails.phone}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.phone}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex items-start">
                       <Mail className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Email:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.email}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="email"
+                            value={orphanageDetails.email}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.email}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex items-start">
                       <Calendar className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Established:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.established}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="established"
+                            value={orphanageDetails.established}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.established}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -102,25 +245,55 @@ const AboutOrphanage = () => {
                   <div className="space-y-3">
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Children:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.children}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="children"
+                            value={orphanageDetails.children}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.children}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Staff:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.staff}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="staff"
+                            value={orphanageDetails.staff}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.staff}</p>
+                        )}
                       </div>
                     </div>
                     
                     <div className="flex items-start">
                       <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />
-                      <div>
+                      <div className="w-full">
                         <p className="text-sm font-medium text-gray-700">Director:</p>
-                        <p className="text-sm text-gray-600">{orphanageDetails.director}</p>
+                        {editMode ? (
+                          <input
+                            type="text"
+                            name="director"
+                            value={orphanageDetails.director}
+                            onChange={handleInputChange}
+                            className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                          />
+                        ) : (
+                          <p className="text-sm text-gray-600">{orphanageDetails.director}</p>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -137,19 +310,47 @@ const AboutOrphanage = () => {
                   <div className="space-y-4">
                     <div>
                       <p className="text-sm font-medium text-gray-700">Our Mission:</p>
-                      <p className="text-sm text-gray-600 mt-1">{orphanageDetails.mission}</p>
+                      {editMode ? (
+                        <textarea
+                          name="mission"
+                          value={orphanageDetails.mission}
+                          onChange={handleInputChange}
+                          className="text-sm text-gray-600 mt-1 w-full h-24 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-sm text-gray-600 mt-1">{orphanageDetails.mission}</p>
+                      )}
                     </div>
                     
                     <div>
                       <p className="text-sm font-medium text-gray-700">Current Needs:</p>
-                      <p className="text-sm text-gray-600 mt-1">{orphanageDetails.needs}</p>
+                      {editMode ? (
+                        <textarea
+                          name="needs"
+                          value={orphanageDetails.needs}
+                          onChange={handleInputChange}
+                          className="text-sm text-gray-600 mt-1 w-full h-24 p-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500"
+                        />
+                      ) : (
+                        <p className="text-sm text-gray-600 mt-1">{orphanageDetails.needs}</p>
+                      )}
                     </div>
                   </div>
                 </div>
                 
                 <div className="bg-white p-6 rounded-lg shadow-sm border">
                   <h3 className="text-xl font-semibold text-gray-800 mb-4">Accreditation</h3>
-                  <p className="text-sm text-gray-600">{orphanageDetails.accreditation}</p>
+                  {editMode ? (
+                    <input
+                      type="text"
+                      name="accreditation"
+                      value={orphanageDetails.accreditation}
+                      onChange={handleInputChange}
+                      className="text-sm text-gray-600 w-full border-b border-gray-300 focus:outline-none focus:border-blue-500"
+                    />
+                  ) : (
+                    <p className="text-sm text-gray-600">{orphanageDetails.accreditation}</p>
+                  )}
                 </div>
                 
                 <div className="bg-blue-50 p-6 rounded-lg shadow-sm border border-blue-100">
@@ -171,7 +372,7 @@ const AboutOrphanage = () => {
         </div>
         
         <p className="text-center text-gray-500 text-sm mt-6">
-          © 2023 {orphanageDetails.name} - All Rights Reserved
+          © {new Date().getFullYear()} {orphanageDetails.orphanageName} - All Rights Reserved
         </p>
       </div>
     </div>
