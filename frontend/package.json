@@ -7,6 +7,7 @@
     "dev": "react-scripts start"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.6.1",
     "@svgr/plugin-svgo": "^8.1.0",
     "@svgr/webpack": "^8.1.0",
     "axios": "^1.8.4",
@@ -18,6 +19,7 @@
     "postcss-selector-matches": "^4.0.0",
     "postcss-selector-not": "^8.0.1",
     "postcss-unique-selectors": "^7.0.3",
+    "react-redux": "^9.2.0",
     "react-router-dom": "^7.4.0",
     "react-scripts": "^5.0.1",
     "react-toastify": "^11.0.5",

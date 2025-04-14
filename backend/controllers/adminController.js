@@ -61,3 +61,73 @@ exports.adminLogin = async (req, res) => {
     res.status(500).json({ msg: "Server error", error: error.message });
   }
 };
+
+// Get Orphanage Details
+exports.getOrphanageDetails = async (req, res) => {
+  try {
+    const admin = await Admin.findById(req.adminId);
+    if (!admin) {
+      return res.status(404).json({ msg: "Admin not found" });
+    }
+
+    const orphanageDetails = {
+      orphanageName: admin.orphanageName,
+      address: admin.address,
+      phone: admin.phone,
+      email: admin.email,
+      website: admin.website,
+      staffCount: admin.staffCount,
+      director: admin.director,
+      mission: admin.mission,
+      needs: admin.needs,
+      accreditation: admin.accreditation
+    };
+
+    res.status(200).json(orphanageDetails);
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
+// Update Orphanage Details
+exports.updateOrphanageDetails = async (req, res) => {
+  try {
+    const {
+      orphanageName,
+      address,
+      phone,
+      email,
+      website,
+      staffCount,
+      director,
+      mission,
+      needs,
+      accreditation
+    } = req.body;
+
+    const updatedAdmin = await Admin.findByIdAndUpdate(
+      req.adminId,
+      {
+        orphanageName,
+        address,
+        phone,
+        email,
+        website,
+        staffCount,
+        director,
+        mission,
+        needs,
+        accreditation
+      },
+      { new: true }
+    );
+
+    if (!updatedAdmin) {
+      return res.status(404).json({ msg: "Admin not found" });
+    }
+
+    res.status(200).json({ msg: "Orphanage details updated successfully" });
+  } catch (error) {
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};

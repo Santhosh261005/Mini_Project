@@ -1,15 +1,15 @@
 const express = require("express");
+const adminController = require("../controllers/adminController");
+const protect = require("../middlewares/authMiddleware");
+
 const router = express.Router();
-const { adminSignup, adminLogin } = require("../controllers/adminController");
-const { postRequirements } = require('../controllers/requirementController');
 
-// Admin Signup Route
-router.post("/signup", adminSignup);
+// Admin authentication routes
+router.post("/signup", adminController.adminSignup);
+router.post("/login", adminController.adminLogin);
 
-// Admin Login Route
-router.post("/login", adminLogin);
-
-
-router.post('/post', postRequirements); // or use `protect` if needed
+// Orphanage details routes (protected)
+router.get("/orphanage", protect, adminController.getOrphanageDetails);
+router.put("/orphanage", protect, adminController.updateOrphanageDetails);
 
 module.exports = router;
