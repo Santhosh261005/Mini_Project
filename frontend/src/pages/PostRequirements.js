@@ -4,7 +4,6 @@ import { ArrowLeft, Save, Plus, Minus } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-
 const PostRequirements = () => {
   const initialRequirements = [
     { id: "1", name: "Books", quantity: 0, priority: "medium", notes: "" },
@@ -66,6 +65,7 @@ const PostRequirements = () => {
       )
     );
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const filteredRequirements = requirements.filter((req) => req.quantity > 0);
@@ -81,7 +81,7 @@ const PostRequirements = () => {
       const token = localStorage.getItem("token");
       const adminName = "Admin Name"; // Get the admin name, replace it with actual logic to get the admin's name
   
-      const res = await fetch("http://localhost:5000/routes/admin/post", {
+      const res = await fetch("http://localhost:5000/api/admin/post", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -89,7 +89,7 @@ const PostRequirements = () => {
         },
         body: JSON.stringify({
           adminName,  // Send admin name
-          items: filteredRequirements,
+          requirements: filteredRequirements, // Corrected field name
         }),
       });
   
@@ -111,8 +111,6 @@ const PostRequirements = () => {
     }
   };
   
-  
-
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "high":
