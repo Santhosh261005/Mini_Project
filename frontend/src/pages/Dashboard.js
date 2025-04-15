@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    booksDonated: 42,
-    clothesDonated: 36,
+    booksDonated: 0,
+    clothesDonated: 0,
     pointsEarned: 0,
     recentDonations: [
       { quantity: 5, category: "books", recipient: "Local School" },

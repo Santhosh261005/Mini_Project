@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Plus, Minus, Trash2, PlusCircle } from "lucide-react";
-import Navbar from "../components/Navbar"; // Optional if you're using a shared navbar
 import { useLocation } from "react-router-dom";
 import { postDonation } from "../api/api";
 
@@ -89,13 +88,8 @@ const DonateNow = () => {
       return;
     }
 
-    if (!ngoId) {
-      alert("NGO ID is missing. Cannot submit donation.");
-      return;
-    }
-
     const donationData = {
-      ngoId,
+      ngoId: ngoId || null,
       items: validItems.map(item => ({
         donationType: item.donationType,
         description: item.description,
@@ -145,103 +139,103 @@ const DonateNow = () => {
             {items.map((item, index) => (
               <div key={item.id} className="border-b pb-4 mb-4">
                 <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-gray-700">Item {index + 1}</h3>
-                {items.length > 1 && (
-                  <button
-                    type="button"
-                    onClick={() => removeItem(item.id)}
-                    className="text-red-500 hover:text-red-700"
-                  >
-                    <Trash2 className="h-5 w-5" />
-                  </button>
-                )}
-              </div>
+                  <h3 className="font-semibold text-gray-700">Item {index + 1}</h3>
+                  {items.length > 1 && (
+                    <button
+                      type="button"
+                      onClick={() => removeItem(item.id)}
+                      className="text-red-500 hover:text-red-700"
+                    >
+                      <Trash2 className="h-5 w-5" />
+                    </button>
+                  )}
+                </div>
 
-              {/* Donation Type */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-1">
-                  What would you like to donate?
-                </label>
-                <select
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  value={item.donationType}
-                  onChange={(e) => handleItemChange(item.id, 'donationType', e.target.value)}
-                >
-                  {getAvailableTypes().concat(item.donationType).map(type => (
-                    <option key={type} value={type}>
-                      {type === "books" && "📚 Books"}
-                      {type === "clothes" && "👕 Clothes"}
-                      {type === "stationery" && "✏️ Stationery"}
-                      {type === "toys" && "🧸 Toys"}
-                      {type === "others" && "🔄 Others"}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Quantity Selector */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-1">Quantity</label>
-                <div className="flex items-center space-x-2">
-                  <button
-                    type="button"
-                    onClick={() => handleDecrement(item.id)}
-                    className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
+                {/* Donation Type */}
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-1">
+                    What would you like to donate?
+                  </label>
+                  <select
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    value={item.donationType}
+                    onChange={(e) => handleItemChange(item.id, 'donationType', e.target.value)}
                   >
-                    <Minus className="h-5 w-5" />
-                  </button>
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      handleItemChange(item.id, 'quantity', val === '' ? '' : parseInt(val) || 0);
-                    }}
-                    min="0"
-                    className="w-16 text-center border p-2 rounded-md"
-                    placeholder="0"
+                    {getAvailableTypes().concat(item.donationType).map(type => (
+                      <option key={type} value={type}>
+                        {type === "books" && "📚 Books"}
+                        {type === "clothes" && "👕 Clothes"}
+                        {type === "stationery" && "✏️ Stationery"}
+                        {type === "toys" && "🧸 Toys"}
+                        {type === "others" && "🔄 Others"}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Quantity Selector */}
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-1">Quantity</label>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      type="button"
+                      onClick={() => handleDecrement(item.id)}
+                      className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
+                    >
+                      <Minus className="h-5 w-5" />
+                    </button>
+                    <input
+                      type="number"
+                      value={item.quantity}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        handleItemChange(item.id, 'quantity', val === '' ? '' : parseInt(val) || 0);
+                      }}
+                      min="0"
+                      className="w-16 text-center border p-2 rounded-md"
+                      placeholder="0"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => handleIncrement(item.id)}
+                      className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
+                    >
+                      <Plus className="h-5 w-5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Description */}
+                <div>
+                  <label className="block text-gray-700 font-semibold mb-1">Description</label>
+                  <textarea
+                    rows="3"
+                    placeholder="Provide more details about your donation..."
+                    className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
+                    value={item.description}
+                    onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
                   />
-                  <button
-                    type="button"
-                    onClick={() => handleIncrement(item.id)}
-                    className="p-2 rounded-md bg-gray-200 hover:bg-gray-300 text-gray-700"
-                  >
-                    <Plus className="h-5 w-5" />
-                  </button>
                 </div>
               </div>
+            ))}
 
-              {/* Description */}
-              <div>
-                <label className="block text-gray-700 font-semibold mb-1">Description</label>
-                <textarea
-                  rows="3"
-                  placeholder="Provide more details about your donation..."
-                  className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-400"
-                  value={item.description}
-                  onChange={(e) => handleItemChange(item.id, 'description', e.target.value)}
-                />
-              </div>
-            </div>
-          ))}
+            <button
+              type="button"
+              onClick={addNewItem}
+              className="flex items-center justify-center w-full py-2 text-indigo-600 hover:text-indigo-800 font-medium"
+            >
+              <PlusCircle className="h-5 w-5 mr-2" />
+              Add Another Item
+            </button>
 
-          <button
-            type="button"
-            onClick={addNewItem}
-            className="flex items-center justify-center w-full py-2 text-indigo-600 hover:text-indigo-800 font-medium"
-          >
-            <PlusCircle className="h-5 w-5 mr-2" />
-            Add Another Item
-          </button>
-
-          {/* Submit Button */}
-          <button
-            type="submit"
-            disabled={loading}
-            className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition duration-200 shadow-md ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            {loading ? "Submitting..." : "Submit Donation"}
-          </button>
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={loading}
+              className={`w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 rounded-lg transition duration-200 shadow-md ${loading ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {loading ? "Submitting..." : "Submit Donation"}
+            </button>
           </form>
         </div>
       </div>

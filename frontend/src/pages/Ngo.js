@@ -165,7 +165,8 @@ const Ngos = () => {
                           <ul className="list-disc list-inside text-gray-700">
                             {ngo.requirements.map((req, index) => (
                               <li key={index}>
-                                {req.name} - Quantity: {req.quantity} {req.priority ? "(Priority: " + req.priority + ")" : ""}
+                              
+                                {req.name} - Quantity: {req.quantity} {req.priority ? "(Priority: " + req.priority + ")" : ""} {req.notes ? "- Notes: " + req.notes : ""}
                               </li>
                             ))}
                           </ul>

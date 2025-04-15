@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Gift, Trophy, Award, Star } from "lucide-react";
+import axios from "axios";
 
 const rewardsData = [
   { title: "Bronze Donor", points: 50, color: "from-red-400 to-orange-500", icon: <Star size={18} /> },
@@ -9,10 +10,23 @@ const rewardsData = [
   { title: "Platinum Donor", points: 500, color: "from-crimson-500 to-red-600", icon: <Gift size={18} /> },
 ];
 
-const userPoints = 120;
-
 const Rewards = () => {
   const navigate = useNavigate();
+  const [userPoints, setUserPoints] = useState(0);
+  const [userBadge, setUserBadge] = useState("None");
+
+  useEffect(() => {
+    const fetchUserRewards = async () => {
+      try {
+        const response = await axios.get("/api/user/rewards", { withCredentials: true });
+        setUserPoints(response.data.points || 0);
+        setUserBadge(response.data.badge || "None");
+      } catch (error) {
+        console.error("Failed to fetch user rewards:", error);
+      }
+    };
+    fetchUserRewards();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-red-100 to-orange-100 flex flex-col items-center justify-center p-6 relative overflow-hidden">
@@ -23,6 +37,7 @@ const Rewards = () => {
         {/* Gradient Header */}
         <div className="bg-gradient-to-r from-red-600 to-rose-600 p-6 text-center">
           <h1 className="text-3xl font-bold text-white drop-shadow-lg">Donation Rewards</h1>
+          <p className="text-white mt-2 font-semibold">Your Badge: {userBadge}</p>
         </div>
         
         {/* Subheading */}
@@ -78,7 +93,7 @@ const Rewards = () => {
 
           {/* Donate Button */}
           <button
-            onClick={() => navigate("/donate-now")}
+            onClick={() => navigate("/donate")}
             className="w-full bg-gradient-to-r from-red-600 to-rose-600 text-white py-3 rounded-xl font-medium hover:shadow-xl transition-all hover:from-red-700 hover:to-rose-700"
           >
             Donate Now
