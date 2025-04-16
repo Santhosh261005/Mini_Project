@@ -7,7 +7,7 @@ from pymongo import MongoClient
 app = Flask(__name__)
 CORS(app)
 
-genai.configure(api_key="AIzaSyBqz9fG2a903h7DjLFIHm5mVxiWO-17jxU")
+genai.configure(api_key="AIzaSyBLKu0zXSxv8gFMTgjloS5Wde6bA_0MRMg")
 model = genai.GenerativeModel("gemini-1.5-pro-latest")
 
 # Connect to MongoDB
