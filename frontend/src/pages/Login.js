@@ -22,6 +22,7 @@ const Login = () => {
 
     try {
       const response = await loginUser(formData);
+      localStorage.setItem("token", response.token); // Save token to localStorage
       alert("Login Successful");
       navigate("/home");
     } catch (err) {

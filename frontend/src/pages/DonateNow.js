@@ -88,7 +88,8 @@ const DonateNow = () => {
       return;
     }
 
-    const donationData = {
+const donationData = {
+  ngoId: ngoId || null, // Ensure ngoId is included in the donation data
       ngoId: ngoId || null,
       items: validItems.map(item => ({
         donationType: item.donationType,

@@ -33,18 +33,33 @@ const getUserStats = async (req, res) => {
 
 const postDonation = async (req, res) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized: Invalid or expired token" });
+    }
+
     const donorId = req.user.id;
     const { ngoId, items } = req.body;
 
+    // Log the incoming request for debugging
+    console.log("Request Body:", req.body);
+    console.log("Donor ID:", donorId);
+    console.log("NGO ID:", ngoId);
+    console.log("Items:", items);
+
+    // Validate donation items
     if (!items || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: "Donation items are required" });
     }
 
-    const donation = new Donation({
+    // Determine if the donation is for a specific NGO or general
+    const donationData = {
       donor: donorId,
-      ngo: ngoId || null,
+      ngo: ngoId || null, // If ngoId is provided, associate it; otherwise, it's a general donation
       items,
-    });
+    };
+
+    console.log("Donation Data:", donationData); // Log the donation data for debugging
+    const donation = new Donation(donationData); // Create the donation object
 
     await donation.save();
 
@@ -70,10 +85,16 @@ const postDonation = async (req, res) => {
       await user.save();
     }
 
-    res.status(201).json({ message: "Donation posted successfully", donation });
+    // Respond with success message and donation details
+    res.status(201).json({
+      message: ngoId
+        ? `Donation posted successfully to NGO with ID: ${ngoId}`
+        : "General donation posted successfully",
+      donation,
+    });
   } catch (error) {
-    console.error("Error posting donation:", error);
-    res.status(500).json({ message: "Server error" });
+    console.error("Error posting donation:", error.message);
+    res.status(500).json({ message: `Server error: ${error.message}` });
   }
 };
 
