@@ -18,8 +18,15 @@ const Rewards = () => {
   useEffect(() => {
     const fetchUserRewards = async () => {
       try {
-        const response = await axios.get("/api/user/rewards", { withCredentials: true });
-        setUserPoints(response.data.points || 0);
+        const token = localStorage.getItem("token");
+        const response = await axios.get("http://localhost:5000/api/user/rewards", {
+          headers: { Authorization: `Bearer ${token}` },
+          withCredentials: true,
+        });
+        setUserPoints(Number(response.data.points) || 0);
+        console.log("Fetched user points:", response.data.points);
+
+        
         setUserBadge(response.data.badge || "None");
       } catch (error) {
         console.error("Failed to fetch user rewards:", error);

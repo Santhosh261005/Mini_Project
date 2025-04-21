@@ -8,7 +8,10 @@ dotenv.config(); // Load environment variables
 const app = express(); // Initialize Express
 
 // Middleware
-app.use(cors()); // Allow cross-origin requests
+app.use(cors({
+  origin: "http://localhost:3000", // Frontend origin
+  credentials: true, // Allow credentials (cookies, authorization headers)
+}));
 app.use(express.json()); // Enable JSON parsing
 
 // Connect to MongoDB
