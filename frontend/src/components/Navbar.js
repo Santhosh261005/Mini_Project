@@ -36,11 +36,6 @@ const Navbar = () => {
             </Link>
           </li>
           <li>
-            <Link to="/donate" className="text-white hover:text-orange-500 drop-shadow-md">
-              Donate Now
-            </Link>
-          </li>
-          <li>
             <Link to="/chatbot" className="text-white hover:text-orange-500 drop-shadow-md">
               Chatbot
             </Link>
@@ -62,9 +57,9 @@ const Navbar = () => {
           </li>
         </ul>
 
-        {/* Book Now Button */}
+        {/* Replaced Book Now button with Donate Now button */}
         <button className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 drop-shadow-md">
-          Book Now
+          Donate Now
         </button>
       </div>
     </nav>
