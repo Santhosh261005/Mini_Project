@@ -4,24 +4,24 @@ import { ClipboardList, Info, ArrowRight, LogOut, Shield } from 'lucide-react';
 
 const AdminOptions = () => {
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-slate-50 via-white to-blue-50">
+    <div className="min-h-screen w-full bg-gradient-to-br from-green-600 via-blue-500 to-blue-400">
       {/* Decorative background elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-slate-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-cyan-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-green-600 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
       
       <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="bg-gradient-to-r from-slate-700 to-blue-700 rounded-t-lg shadow-lg p-6">
+          <div className="bg-gradient-to-r from-green-700 to-green-900 rounded-t-lg shadow-lg p-6">
             <div className="flex justify-between items-center">
               <div className="flex items-center">
                 <Shield className="h-8 w-8 text-white mr-2" />
                 <h1 className="text-2xl font-bold text-white">Admin Dashboard</h1>
               </div>
-              <Link to="/" className="flex items-center text-white hover:text-blue-200 transition-colors">
+              <Link to="/" className="flex items-center text-white hover:text-green-300 transition-colors">
                 <LogOut className="h-5 w-5 mr-1" />
                 <span>Logout</span>
               </Link>
