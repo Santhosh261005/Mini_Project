@@ -20,12 +20,7 @@ const Home = () => {
       <p className="text-white mt-4 text-4xl font-medium">
         We Deliver your Donations to the Right Place
       </p>
-      <Link
-        to="/donate"
-        className="mt-8 bg-orange-500 text-white px-8 py-4 rounded-full hover:bg-orange-600 transition text-xl"
-      >
-        Book a Pickup
-      </Link>
+      {/* Removed Book a Pickup button as requested */}
     </div>
   );
 };

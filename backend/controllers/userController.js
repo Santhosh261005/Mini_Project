@@ -1,16 +1,34 @@
+const mongoose = require("mongoose");
 const User = require("../models/User");
 const Donation = require("../models/Donation");
 
 const getUserStats = async (req, res) => {
   try {
-    const userId = req.user.id;
+    let userId = req.user.id;
+    if (!(userId instanceof mongoose.Types.ObjectId)) {
+      userId = mongoose.Types.ObjectId(userId);
+    }
 
     // Fetch total donations count
-    const totalDonations = await Donation.countDocuments({ donor: userId });
+    const totalDonations = await Donation.countDocuments({ $expr: { $eq: [ "$donor", userId ] } });
 
-    // Fetch books and clothes count
-    const booksDonated = await Donation.countDocuments({ donor: userId, "items.donationType": "books" });
-    const clothesDonated = await Donation.countDocuments({ donor: userId, "items.donationType": "clothes" });
+    // Aggregate total books donated quantity
+    const booksAggregation = await Donation.aggregate([
+      { $match: { $expr: { $eq: [ "$donor", userId ] } } },
+      { $unwind: "$items" },
+      { $match: { "items.donationType": "books" } },
+      { $group: { _id: null, totalQuantity: { $sum: "$items.quantity" } } }
+    ]);
+    const booksDonated = booksAggregation.length > 0 ? booksAggregation[0].totalQuantity : 0;
+
+    // Aggregate total clothes donated quantity
+    const clothesAggregation = await Donation.aggregate([
+      { $match: { $expr: { $eq: [ "$donor", userId ] } } },
+      { $unwind: "$items" },
+      { $match: { "items.donationType": "clothes" } },
+      { $group: { _id: null, totalQuantity: { $sum: "$items.quantity" } } }
+    ]);
+    const clothesDonated = clothesAggregation.length > 0 ? clothesAggregation[0].totalQuantity : 0;
 
     // Fetch user points (assuming there's a points system in User model)
     const user = await User.findById(userId);
