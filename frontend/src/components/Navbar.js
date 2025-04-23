@@ -58,9 +58,9 @@ const Navbar = () => {
         </ul>
 
         {/* Replaced Book Now button with Donate Now button */}
-        <button className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 drop-shadow-md">
+        <Link to="/donate" className="bg-orange-500 text-white px-4 py-2 rounded-full hover:bg-orange-600 drop-shadow-md flex items-center justify-center">
           Donate Now
-        </button>
+        </Link>
       </div>
     </nav>
   );

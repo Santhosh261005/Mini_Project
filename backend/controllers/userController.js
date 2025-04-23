@@ -1,3 +1,8 @@
+// Added nodemailer for sending email notifications
+const nodemailer = require("nodemailer");
+require('dotenv').config();
+
+
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const Donation = require("../models/Donation");
@@ -90,17 +95,57 @@ const postDonation = async (req, res) => {
       user.points = (user.points || 0) + pointsEarned;
 
       // Assign badge based on points thresholds
-      if (user.points >= 100) {
-        user.badge = "Elite";
-      } else if (user.points >= 50) {
+      if (user.points >= 500) {
+        user.badge = "Platinum";
+      } else if (user.points >= 200) {
         user.badge = "Gold";
-      } else if (user.points >= 20) {
+      } else if (user.points >= 100) {
         user.badge = "Silver";
+      }else if (user.points >= 50) {
+          user.badge = "Bronze";
       } else {
         user.badge = "None";
       }
 
       await user.save();
+
+      // Send email notification to user about donation drop-off info
+      // Configure nodemailer transporter (using Gmail SMTP as example)
+      let transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER, // Your email address from environment variables
+          pass: process.env.EMAIL_PASS, // Your email password or app password
+        },
+      });
+
+      // Compose email message
+      let mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: user.email,
+        subject: "Thank you for your donation - Drop-off Information",
+        text: `Dear ${user.fullName},
+
+Thank you for your generous donation! Please drop off your donation items at the following address:
+
+Open Air Auditorium,
+CBIT Campus,
+Hyderabad, Telangana 500075
+
+If you have any questions, feel free to contact us at contact@campusconnect.org.
+
+Best regards,
+Campus Connect Team`,
+      };
+
+      // Send email
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending donation drop-off email:", error);
+        } else {
+          console.log("Donation drop-off email sent:", info.response);
+        }
+      });
     }
 
     // Respond with success message and donation details

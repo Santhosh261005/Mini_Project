@@ -100,16 +100,21 @@ const donationData = {
 
     try {
       setLoading(true);
-      await postDonation(donationData);
-      alert(`Thank you for donating ${validItems.length} items! 🎉`);
-      setItems([
-        {
-          id: Date.now(),
-          donationType: "books",
-          description: "",
-          quantity: ""
-        }
-      ]);
+      const response = await postDonation(donationData);
+      // postDonation returns response.data, so check for message or donation presence
+      if (response && (response.message || response.donation)) {
+        alert(`Thank you for donating ${validItems.length} items! 🎉`);
+        setItems([
+          {
+            id: Date.now(),
+            donationType: "books",
+            description: "",
+            quantity: ""
+          }
+        ]);
+      } else {
+        setError("Failed to submit donation. Please try again.");
+      }
     } catch (err) {
       setError(err.msg || "Failed to submit donation. Please try again.");
     } finally {
