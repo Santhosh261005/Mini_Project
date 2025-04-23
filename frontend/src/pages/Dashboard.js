@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const [stats, setStats] = useState({
-    booksDonated: 0,
-    clothesDonated: 0,
-    pointsEarned: 0,
+    booksDonated: 5,
+    clothesDonated: 3,
+    pointsEarned: 8,
     recentDonations: [
-      { quantity: 5, category: "books", recipient: "Local School" },
-      { quantity: 3, category: "clothes", recipient: "Community Shelter" }
+      { quantity: 5, category: "books", recipient: "Mother Teresa Orphanage" },
+      { quantity: 3, category: "clothes", recipient: "Sairam Charity" }
     ]
   });
 
