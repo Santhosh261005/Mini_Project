@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { adminSignupUser } from "../api/adminApi"; // Import the API function
+import { adminSignupUser } from "../api/adminApi";
 
 const AdminSignup = () => {
   const [formData, setFormData] = useState({
-    orphanageName: '',
     ownerName: '',
     ngoLocation: '',
     childrenCount: 0,
@@ -28,104 +27,115 @@ const AdminSignup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
-  
+
     try {
       const response = await adminSignupUser(formData);
-      alert(response.msg); // Success message from backend
+      alert(response.msg);
       navigate("/admin-login");
     } catch (err) {
-      setError(err.message);
+      setError(err.message || "Signup Failed. Please Try again");
     }
   };
-  
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-100">
-      <div className="bg-white p-6 rounded-lg shadow-md w-96">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-4">Admin Signup</h2>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+    <div
+      className="min-h-screen w-full flex flex-col items-center justify-center"
+      style={{
+        backgroundImage: 'linear-gradient(to bottom right, #ffe4e1, #ffcccb)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
+      {/* Decorative background blobs */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-red-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-orange-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="orphanageName"
-            placeholder="Orphanage Name"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="ownerName"
-            placeholder="Owner Name"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="ngoLocation"
-            placeholder="NGO Location"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="childrenCount"
-            placeholder="No. of Children"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="middleAgeCount"
-            placeholder="No. of Middle Aged People"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="number"
-            name="olderCount"
-            placeholder="No. of Older (>60) People"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="establishmentYear"
-            placeholder="Year of Establishment"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="ownerEmail"
-            placeholder="Owner Email"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            className="w-full p-2 border rounded mt-2"
-            onChange={handleChange}
-            required
-          />
+      <div className="relative z-10 w-full max-w-md px-4 sm:px-0">
+        <div className="overflow-hidden shadow-xl border-0 bg-white/80 backdrop-blur-sm rounded-lg">
+          <div className="bg-gradient-to-r from-red-500 to-orange-600 p-4">
+            <h2 className="text-2xl font-bold text-center text-white">Admin Signup</h2>
+          </div>
+          <div className="p-6">
+            {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
-          <button
-            type="submit"
-            className="w-full bg-blue-500 text-white p-2 rounded mt-4 hover:bg-blue-600"
-          >
-            Signup
-          </button>
-        </form>
+            <form onSubmit={handleSubmit} className="space-y-3">
+              <input
+                type="text"
+                name="ownerName"
+                placeholder="Owner Name"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="ngoLocation"
+                placeholder="NGO Location"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="number"
+                name="childrenCount"
+                placeholder="No. of Children"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="number"
+                name="middleAgeCount"
+                placeholder="No. of Middle Aged People"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="number"
+                name="olderCount"
+                placeholder="No. of Older (>60) People"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="text"
+                name="establishmentYear"
+                placeholder="Year of Establishment"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="email"
+                name="ownerEmail"
+                placeholder="Owner Email"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                className="w-full p-3 border rounded-md bg-gray-50 focus:ring-2 focus:ring-red-500 focus:border-red-500"
+                onChange={handleChange}
+                required
+              />
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 transition-all duration-300 h-12 rounded-md shadow-md hover:shadow-lg text-white font-semibold"
+              >
+                Signup
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
   );

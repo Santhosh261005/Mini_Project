@@ -28,7 +28,14 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div 
+      className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50" 
+      style={{
+        backgroundImage: 'url("https://i.imgur.com/DZf3M0k.png")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       <div className="relative z-10 w-full max-w-md px-4 sm:px-0">
         <div className="overflow-hidden shadow-xl border-0 bg-white/80 backdrop-blur-sm rounded-lg">
           <div className="bg-gradient-to-r from-indigo-500 to-purple-600 p-4">

@@ -35,17 +35,24 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-purple-50">
+    <div 
+      className="min-h-screen w-full flex flex-col items-center justify-center" 
+      style={{
+        backgroundImage: 'linear-gradient(to bottom right, #f0f4ff, #d9f8c4)', // Adjust gradient colors here
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    >
       {/* Decorative elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-0 left-0 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
+        <div className="absolute top-0 left-0 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000"></div>
       </div>
 
       <div className="relative z-10 w-full max-w-md px-4 sm:px-0">
         <div className="overflow-hidden shadow-xl border-0 bg-white/80 backdrop-blur-sm rounded-lg">
-          <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-4">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-4">
             <div className="flex items-center justify-center py-3">
               <UserPlus className="h-8 w-8 text-white mr-2" />
               <h1 className="text-2xl font-bold text-white">Student Signup</h1>
@@ -124,7 +131,7 @@ const Signup = () => {
             <div className="mt-6 text-center">
               <p className="text-sm text-gray-600">
                 Already have an account?{" "}
-                <Link to="/login" className="text-emerald-600 hover:text-emerald-800 transition-colors duration-200">
+                <Link to="/login" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-200">
                   Login here
                 </Link>
               </p>
