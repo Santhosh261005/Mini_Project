@@ -73,11 +73,19 @@ exports.getOrphanageDetails = async (req, res) => {
       return res.status(401).json({ msg: "Admin ID not found in request" });
     }
     const admin = await Admin.findById(adminId);
+    console.log("Fetched admin document in getOrphanageDetails:", admin); // Debug log
     if (!admin) {
       return res.status(404).json({ msg: "Admin not found" });
     }
 
     const orphanageDetails = {
+      ownerName: admin.ownerName,
+      ngoLocation: admin.ngoLocation,
+      childrenCount: admin.childrenCount,
+      middleAgeCount: admin.middleAgeCount,
+      olderCount: admin.olderCount,
+      establishmentYear: admin.establishmentYear,
+      ownerEmail: admin.ownerEmail,
       orphanageName: admin.orphanageName,
       address: admin.address,
       phone: admin.phone,
@@ -87,7 +95,8 @@ exports.getOrphanageDetails = async (req, res) => {
       director: admin.director,
       mission: admin.mission,
       needs: admin.needs,
-      accreditation: admin.accreditation
+      accreditation: admin.accreditation,
+      requirements: admin.requirements
     };
 
     res.status(200).json(orphanageDetails);
@@ -175,6 +184,13 @@ exports.postRequirements = async (req, res) => {
 exports.updateOrphanageDetails = async (req, res) => {
   try {
     const {
+      ownerName,
+      ngoLocation,
+      childrenCount,
+      middleAgeCount,
+      olderCount,
+      establishmentYear,
+      ownerEmail,
       orphanageName,
       address,
       phone,
@@ -184,7 +200,8 @@ exports.updateOrphanageDetails = async (req, res) => {
       director,
       mission,
       needs,
-      accreditation
+      accreditation,
+      requirements
     } = req.body;
 
     const adminId = req.adminId || (req.user && req.user.adminId);
@@ -194,16 +211,24 @@ exports.updateOrphanageDetails = async (req, res) => {
     const updatedAdmin = await Admin.findByIdAndUpdate(
       adminId,
       {
+        ownerName,
+        ngoLocation,
+        childrenCount: parseInt(childrenCount),
+        middleAgeCount: parseInt(middleAgeCount),
+        olderCount: parseInt(olderCount),
+        establishmentYear,
+        ownerEmail,
         orphanageName,
         address,
         phone,
         email,
         website,
-        staffCount,
+        staffCount: parseInt(staffCount),
         director,
         mission,
         needs,
-        accreditation
+        accreditation,
+        requirements
       },
       { new: true }
     );

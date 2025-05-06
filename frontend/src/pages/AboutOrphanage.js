@@ -11,20 +11,25 @@ const AboutOrphanage = () => {
 
   const [editMode, setEditMode] = useState(false);
   const [orphanageDetails, setOrphanageDetails] = useState({
+    ownerName: "",
+    ngoLocation: "",
+    childrenCount: "",
+    middleAgeCount: "",
+    olderCount: "",
+    establishmentYear: "",
+    ownerEmail: "",
+    password: "",
     orphanageName: "",
-    established: "",
     address: "",
     phone: "",
     email: "",
     website: "",
-    children: "",
-    middleAged: "",
-    oldPeople: "",
-    staff: "",
+    staffCount: "",
     director: "",
     mission: "",
     needs: "",
-    accreditation: ""
+    accreditation: "",
+    requirements: []
   });
 
   useEffect(() => {
@@ -33,10 +38,10 @@ const AboutOrphanage = () => {
         const data = await getOrphanageDetails();
         setOrphanageDetails({
           ...data,
-          children: `${data.childrenCount} children`,
-          middleAged: `${data.middleAgedCount} middle aged people`,
-          oldPeople: `${data.oldPeopleCount} old (>60) people`,
-          staff: `${data.staffCount} staff members`
+          childrenCount: `${data.childrenCount} children`,
+          middleAgeCount: `${data.middleAgeCount} middle aged people`,
+          olderCount: `${data.olderCount} old (>60) people`,
+          staffCount: `${data.staffCount} staff members`
         });
 
         const isEmpty = Object.values(data).every(
@@ -63,10 +68,10 @@ const AboutOrphanage = () => {
     try {
       const response = await updateOrphanageDetails({
         ...orphanageDetails,
-        childrenCount: parseInt(orphanageDetails.children),
-        middleAgedCount: parseInt(orphanageDetails.middleAged),
-        oldPeopleCount: parseInt(orphanageDetails.oldPeople),
-        staffCount: parseInt(orphanageDetails.staff)
+        childrenCount: parseInt(orphanageDetails.childrenCount),
+        middleAgeCount: parseInt(orphanageDetails.middleAgeCount),
+        olderCount: parseInt(orphanageDetails.olderCount),
+        staffCount: parseInt(orphanageDetails.staffCount)
       });
 
       if (response.msg) {
@@ -78,10 +83,10 @@ const AboutOrphanage = () => {
       const data = await getOrphanageDetails();
       setOrphanageDetails({
         ...data,
-        children: `${data.childrenCount} children`,
-        middleAged: `${data.middleAgedCount} middle aged people`,
-        oldPeople: `${data.oldPeopleCount} old (>60) people`,
-        staff: `${data.staffCount} staff members`
+        childrenCount: `${data.childrenCount} children`,
+        middleAgeCount: `${data.middleAgeCount} middle aged people`,
+        olderCount: `${data.olderCount} old (>60) people`,
+        staffCount: `${data.staffCount} staff members`
       });
 
     } catch (error) {
@@ -127,7 +132,7 @@ const AboutOrphanage = () => {
           )}
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-sm不错的 rounded-lg shadow-xl overflow-hidden">
           <div className="bg-blue-900 p-4">
             <h1 className="text-2xl font-bold text-white text-center">About Our Orphanage</h1>
           </div>
@@ -167,13 +172,13 @@ const AboutOrphanage = () => {
                     General Information
                   </h3>
                   {[{
-                    icon: <MapPin className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Address', field: 'address'
+                    icon: <MapPin className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Address', field: 'ngoLocation'
                   }, {
                     icon: <Phone className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Phone', field: 'phone'
                   }, {
-                    icon: <Mail className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Email', field: 'email'
+                    icon: <Mail className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Email', field: 'ownerEmail'
                   }, {
-                    icon: <Calendar className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Established', field: 'established'
+                    icon: <Calendar className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Established', field: 'establishmentYear'
                   }].map(({ icon, label, field }) => (
                     <div key={field} className="flex items-start">
                       {icon}
@@ -201,11 +206,11 @@ const AboutOrphanage = () => {
                     Our Community
                   </h3>
                   {[{
-                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Children', field: 'children', type: 'number'
+                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Children', field: 'childrenCount', type: 'number'
                   }, {
-                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Middle Aged People', field: 'middleAged', type: 'number'
+                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Middle Aged People', field: 'middleAgeCount', type: 'number'
                   }, {
-                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Old (>60) People', field: 'oldPeople', type: 'number'
+                    icon: <Users className="h-5 w-5 text-gray-500 mr-2 mt-0.5" />, label: 'Old (>60) People', field: 'olderCount', type: 'number'
                   }].map(({ icon, label, field, type }) => (
                     <div key={field} className="flex items-start">
                       {icon}

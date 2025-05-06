@@ -63,7 +63,7 @@ const WelcomePage = () => {
           </div>
 
           {/* Sign up section */}
-          <div className="mt-6 text-center">
+          <div className="mb-10 text-center">
             <p className="text-sm text-gray-500">
               Don't have an account? 
               <Link to="/signup" className="text-indigo-600 hover:text-indigo-800 transition-colors duration-200"> Sign Up</Link>
