@@ -158,6 +158,26 @@ const Ngos = () => {
                         </div>
                       </div>
 
+                      {/* Images Section */}
+                      <div className="mt-4">
+                        <h4 className="font-medium text-gray-800 mb-2">Images:</h4>
+                        {ngo.images && ngo.images.length > 0 ? (
+                          <div className="flex flex-wrap gap-4">
+                            {console.log(ngo.images)}
+                            {ngo.images.map((imgUrl, index) => (
+                              <img
+                                key={index}
+                                src={imgUrl.startsWith('http') ? imgUrl : `http://localhost:5000${imgUrl}`}
+                                alt={`NGO Image ${index + 1}`}
+                                className="w-32 h-32 object-cover rounded-md shadow-md"
+                              />
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-gray-500">No images available.</p>
+                        )}
+                      </div>
+
                       {/* Requirements Section */}
                       <div>
                         <h4 className="font-medium text-gray-800 mt-4 mb-2">Requirements:</h4>

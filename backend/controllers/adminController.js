@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const Admin = require("../models/Admin");
+const path = require("path");
 
 // Admin Signup Controller
 exports.adminSignup = async (req, res) => {
@@ -65,7 +66,6 @@ exports.adminLogin = async (req, res) => {
   }
 };
 
-// Get Orphanage Details
 exports.getOrphanageDetails = async (req, res) => {
   try {
     const adminId = req.adminId || (req.user && req.user.adminId);
@@ -96,7 +96,8 @@ exports.getOrphanageDetails = async (req, res) => {
       mission: admin.mission,
       needs: admin.needs,
       accreditation: admin.accreditation,
-      requirements: admin.requirements
+      requirements: admin.requirements,
+      images: admin.images || []
     };
 
     res.status(200).json(orphanageDetails);
@@ -105,7 +106,6 @@ exports.getOrphanageDetails = async (req, res) => {
   }
 };
 
-// Post Requirements
 exports.postRequirements = async (req, res) => {
   try {
     const { adminName, requirements } = req.body;
@@ -179,8 +179,6 @@ exports.postRequirements = async (req, res) => {
   }
 };
 
-  
-// Update Orphanage Details
 exports.updateOrphanageDetails = async (req, res) => {
   try {
     const {
@@ -243,6 +241,37 @@ exports.updateOrphanageDetails = async (req, res) => {
   }
 };
 
+exports.uploadOrphanageImages = async (req, res) => {
+  try {
+    const adminId = req.adminId || (req.user && req.user.adminId);
+    if (!adminId) {
+      return res.status(401).json({ msg: "Admin ID not found in request" });
+    }
+    if (!req.files || req.files.length === 0) {
+      return res.status(400).json({ msg: "No images uploaded" });
+    }
+
+    const imageUrls = req.files.map(file => {
+      // Assuming the server serves static files from /uploads
+      return `/uploads/${file.filename}`;
+    });
+
+    // Update the Admin document by appending new image URLs
+    const admin = await Admin.findById(adminId);
+    if (!admin) {
+      return res.status(404).json({ msg: "Admin not found" });
+    }
+
+    admin.images = admin.images ? admin.images.concat(imageUrls) : imageUrls;
+    await admin.save();
+
+    res.status(200).json({ msg: "Images uploaded successfully", images: admin.images });
+  } catch (error) {
+    console.error("Error uploading images:", error);
+    res.status(500).json({ msg: "Server error", error: error.message });
+  }
+};
+
 exports.getVerifiedNgos = async (req, res) => {
   try {
     // Fetch all NGOs from Admin collection
@@ -256,7 +285,8 @@ exports.getVerifiedNgos = async (req, res) => {
       website: 1,
       mission: 1,
       needs: 1,
-      requirements: 1
+      requirements: 1,
+      images: 1 // Include images field
     }).lean();
 
     console.log("Fetched NGOs from DB:", ngos); // Added log
@@ -272,7 +302,8 @@ exports.getVerifiedNgos = async (req, res) => {
       website: ngo.website || "",
       mission: ngo.mission || "",
       needs: ngo.needs || "",
-      requirements: ngo.requirements || []
+      requirements: ngo.requirements || [],
+      images: ngo.images || [] // Include images in response
     }));
 
     res.status(200).json({ ngos: formattedNgos });

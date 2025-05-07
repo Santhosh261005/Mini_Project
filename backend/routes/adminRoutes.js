@@ -9,8 +9,13 @@ router.post("/signup", adminController.adminSignup);
 router.post("/login", adminController.adminLogin);
 
 // Orphanage details routes (protected)
+const upload = require("../utils/upload");
+
 router.get("/orphanage", adminAuth, adminController.getOrphanageDetails);
 router.put("/orphanage", adminAuth, adminController.updateOrphanageDetails);
+
+// Upload orphanage images
+router.post("/orphanage/images", adminAuth, upload.array('images', 10), adminController.uploadOrphanageImages);
 
 // New route to get verified NGOs and their requirements
 router.get("/ngos", adminAuth, adminController.getVerifiedNgos);

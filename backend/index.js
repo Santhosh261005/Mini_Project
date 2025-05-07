@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 dotenv.config(); // Load environment variables
+const path = require('path');
 
 
 const app = express(); // Initialize Express
@@ -13,6 +14,9 @@ app.use(cors({
   credentials: true, // Allow credentials (cookies, authorization headers)
 }));
 app.use(express.json()); // Enable JSON parsing
+
+setup: app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 
 // Connect to MongoDB
 mongoose

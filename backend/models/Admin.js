@@ -13,6 +13,7 @@ const AdminSchema = new mongoose.Schema({
   orphanageName: { type: String },
   address: { type: String },
   phone: { type: String },
+
   email: { type: String },
   website: { type: String },
   staffCount: { type: String },
@@ -20,6 +21,7 @@ const AdminSchema = new mongoose.Schema({
   mission: { type: String },
   needs: { type: String },
   accreditation: { type: String },
+  images: [{ type: String }],
   requirements: [{ // New field for storing requirements
     name: { type: String, required: true },
     quantity: { type: Number, required: true },

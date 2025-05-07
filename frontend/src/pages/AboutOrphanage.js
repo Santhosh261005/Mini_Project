@@ -29,8 +29,11 @@ const AboutOrphanage = () => {
     mission: "",
     needs: "",
     accreditation: "",
-    requirements: []
+    requirements: [],
+    images: []
   });
+
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   useEffect(() => {
     const fetchOrphanageDetails = async () => {
@@ -62,6 +65,41 @@ const AboutOrphanage = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setOrphanageDetails(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleFileChange = (e) => {
+    setSelectedFiles(e.target.files);
+  };
+
+  const handleUploadImages = async () => {
+    if (selectedFiles.length === 0) {
+      alert("Please select images to upload.");
+      return;
+    }
+    const formData = new FormData();
+    for (let i = 0; i < selectedFiles.length; i++) {
+      formData.append('images', selectedFiles[i]);
+    }
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/admin/orphanage/images', {
+        method: 'POST',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        body: formData
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert(data.msg);
+        setOrphanageDetails(prev => ({ ...prev, images: data.images }));
+        setSelectedFiles([]);
+      } else {
+        alert(data.msg || 'Failed to upload images');
+      }
+    } catch (error) {
+      alert('Error uploading images: ' + error.message);
+    }
   };
 
   const handleSave = async () => {
@@ -132,7 +170,7 @@ const AboutOrphanage = () => {
           )}
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm不错的 rounded-lg shadow-xl overflow-hidden">
+        <div className="bg-white/80 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden">
           <div className="bg-blue-900 p-4">
             <h1 className="text-2xl font-bold text-white text-center">About Our Orphanage</h1>
           </div>
@@ -280,6 +318,41 @@ const AboutOrphanage = () => {
                   ) : (
                     <p className="text-sm text-gray-600">{orphanageDetails.accreditation}</p>
                   )}
+                </div>
+
+                <div className="bg-white p-6 rounded-lg shadow-sm border space-y-3">
+                  <h3 className="text-lg font-semibold text-gray-800">Upload Images</h3>
+                  {editMode && (
+                    <>
+                      <input
+                        type="file"
+                        multiple
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        className="mb-2"
+                      />
+                      <button
+                        onClick={handleUploadImages}
+                        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md"
+                      >
+                        Upload Images
+                      </button>
+                    </>
+                  )}
+                  <div className="mt-4 flex flex-wrap gap-4">
+                    {orphanageDetails.images && orphanageDetails.images.length > 0 ? (
+                      orphanageDetails.images.map((imgUrl, index) => (
+                        <img
+                          key={index}
+                          src={imgUrl.startsWith('http') ? imgUrl : `http://localhost:5000${imgUrl}`}
+                          alt={`Orphanage Image ${index + 1}`}
+                          className="w-32 h-32 object-cover rounded-md shadow-md"
+                        />
+                      ))
+                    ) : (
+                      <p className="text-gray-600">No images uploaded yet.</p>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
